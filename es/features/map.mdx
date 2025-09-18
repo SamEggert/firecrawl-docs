@@ -1,0 +1,146 @@
+---
+title: "Mapa"
+description: "Introduce una URL y obtén todas las URLs del sitio web: extremadamente rápido"
+og:title: "Mapa | Firecrawl"
+og:description: "Pasa de una sola URL a un mapa de todo el sitio web"
+icon: "map"
+version: "v2"
+sidebarTitle: "Mapa"
+---
+
+import InstallationPython from "/snippets/es/v2/installation/python.mdx";
+import InstallationJavaScript from "/snippets/es/v2/installation/js.mdx";
+import MapPython from "/snippets/es/v2/map/base/python.mdx";
+import MapJavaScript from "/snippets/es/v2/map/base/js.mdx";
+import MapCURL from "/snippets/es/v2/map/base/curl.mdx";
+import MapResponse from "/snippets/es/v2/map/base/output.mdx";
+import MapLocationPython from "/snippets/es/v2/map/location/python.mdx";
+import MapLocationNode from "/snippets/es/v2/map/location/js.mdx";
+import MapLocationCURL from "/snippets/es/v2/map/location/curl.mdx";
+
+<div id="introducing-map">
+  ## Presentamos /map
+</div>
+
+La forma más sencilla de pasar de una única URL a un mapa de todo el sitio web. Esto es especialmente útil para:
+
+* Cuando necesitas pedirle al usuario final que elija qué enlaces raspar
+* Cuando necesitas conocer rápidamente los enlaces de un sitio web
+* Cuando necesitas raspar páginas de un sitio web relacionadas con un tema específico (usa el parámetro `search`)
+* Cuando solo necesitas raspar páginas específicas de un sitio web
+
+<div id="mapping">
+  ## Mapeo
+</div>
+
+<div id="map-endpoint">
+  ### endpoint /map
+</div>
+
+Se utiliza para mapear una URL y obtener las URL del sitio web. Devuelve la mayoría de los enlaces presentes en el sitio.
+
+<div id="installation">
+  ### Instalación
+</div>
+
+<CodeGroup>
+  <InstallationPython />
+
+  <InstallationJavaScript />
+</CodeGroup>
+
+<div id="usage">
+  ### Uso
+</div>
+
+<CodeGroup>
+  <MapPython />
+
+  <MapJavaScript />
+</CodeGroup>
+
+<div id="response">
+  ### Respuesta
+</div>
+
+Los SDK devolverán el objeto de datos directamente. cURL devolverá el payload exactamente como se muestra a continuación.
+
+<MapResponse />
+
+<Warning>
+  El título y la descripción no siempre están presentes, ya que depende del sitio web.
+</Warning>
+
+<div id="map-with-search">
+  #### Mapa con búsqueda
+</div>
+
+El Mapa con el parámetro `search` te permite buscar URLs específicas dentro de un sitio web.
+
+```bash cURL
+curl -X POST https://api.firecrawl.dev/v2/map \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "url": "https://firecrawl.dev",
+    "search": "docs"
+  }'
+```
+
+La respuesta será una lista ordenada, de la más relevante a la menos relevante.
+
+```json
+{
+  "status": "success",
+  "links": [
+    {
+      "url": "https://docs.firecrawl.dev",
+      "title": "Documentación de Firecrawl",
+      "description": "Documentación de Firecrawl",
+    },
+    {
+      "url": "https://docs.firecrawl.dev/sdks/python",
+      "title": "SDK de Python de Firecrawl",
+      "description": "Documentación del SDK de Python de Firecrawl"
+    },
+    ...
+  ]
+}
+```
+
+<div id="location-and-language">
+  ## Ubicación e idioma
+</div>
+
+Especifica el país y los idiomas preferidos para obtener contenido relevante según tu ubicación objetivo y tus preferencias de idioma, similar al endpoint de scrape.
+
+<div id="how-it-works">
+  ### Cómo funciona
+</div>
+
+Cuando especificas la configuración de ubicación, Firecrawl usará un proxy adecuado si está disponible y emulará la configuración de idioma y zona horaria correspondientes. De forma predeterminada, la ubicación se establece en &#39;US&#39; si no se especifica.
+
+<div id="usage">
+  ### Uso
+</div>
+
+Para usar la configuración de ubicación e idioma, incluye el objeto `location` en el cuerpo de tu solicitud con las siguientes propiedades:
+
+* `country`: código de país ISO 3166-1 alfa-2 (p. ej., &#39;US&#39;, &#39;AU&#39;, &#39;DE&#39;, &#39;JP&#39;). De forma predeterminada es &#39;US&#39;.
+* `languages`: una matriz/lista de idiomas y configuraciones regionales preferidos para la solicitud en orden de prioridad. De forma predeterminada es el idioma de la ubicación especificada.
+
+<CodeGroup>
+  <MapLocationPython />
+
+  <MapLocationNode />
+
+  <MapLocationCURL />
+</CodeGroup>
+
+Para más detalles sobre las ubicaciones compatibles, consulta la [documentación de proxies](/es/features/proxies).
+
+<div id="considerations">
+  ## Consideraciones
+</div>
+
+Este endpoint prioriza la velocidad, por lo que es posible que no capture todos los enlaces del sitio web. Estamos trabajando en mejoras. Agradecemos mucho sus comentarios y sugerencias.

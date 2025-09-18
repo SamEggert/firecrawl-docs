@@ -1,0 +1,20 @@
+```js Node
+import FirecrawlApp, { ScrapeResponse } from '@mendable/firecrawl-js';
+
+const app = new FirecrawlApp({apiKey: "fc-YOUR_API_KEY"});
+
+// Extrae un sitio web:
+const scrapeResult = await app.scrapeUrl('firecrawl.dev', {
+  formats: ['markdown', 'html'],
+  agent: {
+    model: 'FIRE-1',
+    prompt: 'Navega por los listados de productos haciendo clic en el botón "Next Page" hasta que esté deshabilitado. Extrae cada página.'
+  }  
+}) as ScrapeResponse;
+
+if (!scrapeResult.success) {
+  throw new Error(`Error al extraer: ${scrapeResult.error}`)
+}
+
+console.log(scrapeResult)
+```

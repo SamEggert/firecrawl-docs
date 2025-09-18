@@ -1,0 +1,9 @@
+```js Node.js
+const crawlResponse = await app.checkCrawlStatus("<crawl_id>");
+
+if (!crawlResponse.success) {
+  throw new Error(`No se pudo comprobar el estado del rastreo: ${crawlResponse.error}`)
+}
+
+console.log(crawlResponse)
+```

@@ -1,0 +1,80 @@
+---
+title: "Proxies"
+description: "Conoce los tipos de proxy, sus ubicaciones y cómo Firecrawl selecciona proxies para tus solicitudes."
+og:title: "Proxies | Firecrawl"
+og:description: "Conoce los tipos de proxy, sus ubicaciones y cómo Firecrawl selecciona proxies para tus solicitudes."
+---
+
+import LocationPython from "/snippets/es/v2/scrape/location/python.mdx";
+import LocationNode from "/snippets/es/v2/scrape/location/js.mdx";
+import LocationCURL from "/snippets/es/v2/scrape/location/curl.mdx";
+
+Firecrawl ofrece distintos tipos de proxy para ayudarte a extraer sitios web con diferentes niveles de protección antibots. Puedes especificar el tipo de proxy mediante el parámetro `proxy`.
+
+> De forma predeterminada, Firecrawl enruta todas las solicitudes a través de proxies para garantizar la confiabilidad y el acceso, incluso si no especificas un tipo de proxy o una ubicación.
+
+<div id="location-based-proxy-selection">
+  ## Selección de proxy según la ubicación
+</div>
+
+Firecrawl selecciona automáticamente el mejor proxy según tu ubicación especificada o detectada. Esto ayuda a optimizar el rendimiento y la fiabilidad del raspado. Sin embargo, no todas las ubicaciones están disponibles por ahora. Las siguientes ubicaciones están habilitadas:
+
+| Country Code | Country Name         | Stealth Mode Support |
+|--------------|----------------------|----------------------|
+| AE           | United Arab Emirates | No                   |
+| AU           | Australia            | Yes                  |
+| BR           | Brazil               | Yes                  |
+| CA           | Canada               | No                   |
+| CN           | China                | No                   |
+| CZ           | Czechia              | No                   |
+| DE           | Germany              | Yes                  |
+| FR           | France               | Yes                  |
+| GB           | United Kingdom       | No                   |
+| IL           | Israel               | No                   |
+| IN           | India                | No                   |
+| IT           | Italy                | No                   |
+| JP           | Japan                | No                   |
+| PL           | Poland               | No                   |
+| PT           | Portugal             | No                   |
+| QA           | Qatar                | No                   |
+| TR           | Turkey               | No                   |
+| US           | United States        | Yes                  |
+| VN           | Vietnam              | No                   |
+
+<Warning>La lista de ubicaciones de proxy compatibles se actualizó por última vez el 12 de sep. de 2025. La disponibilidad puede cambiar con el tiempo.</Warning>
+
+Si necesitas proxies en una ubicación que no aparece arriba, [contáctanos](mailto:help@firecrawl.com) y cuéntanos tus requisitos.
+
+Si no especificas un proxy o una ubicación, Firecrawl seleccionará automáticamente la mejor opción según el sitio de destino y tu solicitud.
+
+<div id="how-to-specify-proxy-location">
+  ## Cómo especificar la ubicación del proxy
+</div>
+
+Puedes solicitar una ubicación de proxy específica estableciendo el parámetro `location.country` en tu solicitud. Por ejemplo, para usar un proxy brasileño, establece `location.country` en `BR`.
+
+Para más detalles, consulta la [referencia de la API de `location.country`](https://docs.firecrawl.dev/api-reference/endpoint/scrape#body-location).
+
+<CodeGroup>
+  <LocationPython />
+
+  <LocationNode />
+
+  <LocationCURL />
+</CodeGroup>
+
+<Info>Si solicitas un país donde no haya un proxy disponible, Firecrawl usará la región disponible más cercana (UE o EE. UU.) y configurará la ubicación del navegador en el país solicitado.</Info>
+
+<div id="proxy-types">
+  ## Tipos de proxy
+</div>
+
+Firecrawl admite tres tipos de proxy:
+
+* **basic**: Proxy para raspar sitios con soluciones anti‑bot nulas o básicas. Rápido y generalmente funciona.
+* **stealth**: Proxy sigiloso para raspar sitios con soluciones anti‑bot avanzadas o para sitios que bloquean proxies regulares. Más lento, pero más confiable en ciertos sitios. [Más información sobre el modo Stealth →](/es/features/stealth-mode)
+* **auto**: Firecrawl volverá a intentar el raspado automáticamente con proxy sigiloso si falla el proxy básico. Si el reintento con sigiloso tiene éxito, se cobrarán 5 créditos por el raspado. Si el primer intento con básico tiene éxito, solo se cobrará el costo regular.
+
+***
+
+> **Nota:** Para información detallada sobre el uso de proxies sigilosos, incluidos los costos de créditos y las estrategias de reintento, consulta la [documentación del modo Stealth](/es/features/stealth-mode).

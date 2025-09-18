@@ -1,0 +1,386 @@
+---
+title: "Búsqueda"
+description: "Busca en la web y obtén el contenido completo de los resultados"
+og:title: "Búsqueda | Firecrawl"
+og:description: "Busca en la web y obtén el contenido completo de las páginas desde los resultados"
+icon: "magnifying-glass"
+---
+
+import InstallationPython from "/snippets/es/v1/installation/python.mdx";
+import InstallationNode from "/snippets/es/v1/installation/js.mdx";
+import InstallationGo from "/snippets/es/v1/installation/go.mdx";
+import InstallationRust from "/snippets/es/v1/installation/rust.mdx";
+import SearchPython from "/snippets/es/v1/search/base/python.mdx";
+import SearchNode from "/snippets/es/v1/search/base/js.mdx";
+import SearchCURL from "/snippets/es/v1/search/base/curl.mdx";
+import SearchContentPython from "/snippets/es/v1/search/content/python.mdx";
+import SearchContentNode from "/snippets/es/v1/search/content/js.mdx";
+import SearchContentCURL from "/snippets/es/v1/search/content/curl.mdx";
+import SearchLocationPython from "/snippets/es/v1/search/location/python.mdx";
+import SearchLocationNode from "/snippets/es/v1/search/location/js.mdx";
+import SearchLocationCURL from "/snippets/es/v1/search/location/curl.mdx";
+import SearchTimePython from "/snippets/es/v1/search/time/python.mdx";
+import SearchTimeNode from "/snippets/es/v1/search/time/js.mdx";
+import SearchTimeCURL from "/snippets/es/v1/search/time/curl.mdx";
+
+La API de Búsqueda de Firecrawl te permite realizar búsquedas en la web y, opcionalmente, extraer (scrape) los resultados en una sola operación.
+
+* Elige formatos de salida específicos (Markdown, HTML, enlaces, capturas de pantalla)
+* Busca en la web con parámetros personalizables (ubicación, etc.)
+* Opcionalmente obtén contenido de los resultados de búsqueda en varios formatos
+* Controla la cantidad de resultados y establece timeouts
+
+Para más detalles, consulta la [referencia del endpoint Search](https://docs.firecrawl.dev/api-reference/endpoint/search).
+
+
+<div id="performing-a-search-with-firecrawl">
+  ## Realizar una búsqueda con Firecrawl
+</div>
+
+<div id="search-endpoint">
+  ### Endpoint /search
+</div>
+
+Se usa para realizar búsquedas en la web y, opcionalmente, recuperar contenido de los resultados.
+
+<div id="installation">
+  ### Instalación
+</div>
+
+<CodeGroup>
+
+  <InstallationPython />
+
+  <InstallationNode />
+
+  <InstallationGo />
+  
+  <InstallationRust />
+
+</CodeGroup>
+
+<div id="basic-usage">
+  ### Uso básico
+</div>
+
+<CodeGroup>
+
+  <SearchPython />
+
+  <SearchNode />
+  
+  <SearchCURL />
+
+</CodeGroup>
+
+<div id="response">
+  ### Respuesta
+</div>
+
+Los SDK devolverán el objeto de datos directamente. cURL devolverá el payload completo.
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "title": "Firecrawl - La API definitiva de scraping web",
+      "description": "Firecrawl es una potente API de scraping web que convierte cualquier sitio web en datos limpios y estructurados para IA y análisis.",
+      "url": "https://firecrawl.dev/"
+    },
+    {
+      "title": "Scraping web con Firecrawl - Guía completa",
+      "description": "Aprende a usar Firecrawl para extraer datos de sitios web sin complicaciones.",
+      "url": "https://firecrawl.dev/guides/web-scraping/"
+    },
+    {
+      "title": "Documentación de Firecrawl - Introducción",
+      "description": "Documentación oficial de la API de scraping web de Firecrawl.",
+      "url": "https://docs.firecrawl.dev/"
+    }
+    // ... más resultados
+  ]
+}
+```
+
+
+<div id="search-with-content-scraping">
+  ## Búsqueda con raspado de contenido
+</div>
+
+Busca y extrae contenido de los resultados de búsqueda en una sola operación.
+
+<CodeGroup>
+
+  <SearchContentPython />
+
+  <SearchContentNode />
+  
+  <SearchContentCURL />
+
+</CodeGroup>
+
+<div id="response-with-scraped-content">
+  ### Respuesta con contenido extraído
+</div>
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "title": "Firecrawl - La API definitiva de scraping web",
+      "description": "Firecrawl es una potente API de scraping web que convierte cualquier sitio web en datos limpios y estructurados para IA y análisis.",
+      "url": "https://firecrawl.dev/",
+      "markdown": "# Firecrawl\n\nLa API definitiva de scraping web\n\n## Convierte cualquier sitio web en datos limpios y estructurados\n\nFirecrawl facilita la extracción de datos de sitios web para aplicaciones de IA, investigación de mercados, agregación de contenido y más...",
+      "links": [
+        "https://firecrawl.dev/pricing",
+        "https://firecrawl.dev/docs",
+        "https://firecrawl.dev/guides",
+        // ... más enlaces
+      ],
+      "metadata": {
+        "title": "Firecrawl - La API definitiva de scraping web",
+        "description": "Firecrawl es una potente API de scraping web que convierte cualquier sitio web en datos limpios y estructurados para IA y análisis.",
+        "sourceURL": "https://firecrawl.dev/",
+        "statusCode": 200
+      }
+    },
+    // ... más resultados
+  ]
+}
+```
+
+
+<div id="advanced-search-options">
+  ## Opciones de búsqueda avanzadas
+</div>
+
+La API de búsqueda de Firecrawl admite varios parámetros para personalizar tu búsqueda:
+
+<div id="location-customization">
+  ### Personalización de la ubicación
+</div>
+
+<CodeGroup>
+
+  <SearchLocationPython />
+
+  <SearchLocationNode />
+  
+  <SearchLocationCURL />
+
+</CodeGroup>
+
+<div id="time-based-search">
+  ### Búsqueda por tiempo
+</div>
+
+Usa el parámetro `tbs` para filtrar los resultados por tiempo:
+
+<CodeGroup>
+
+  <SearchTimePython />
+
+  <SearchTimeNode />
+  
+  <SearchTimeCURL />
+
+</CodeGroup>
+
+Valores comunes de `tbs`:
+
+- `qdr:h` - Última hora
+- `qdr:d` - Últimas 24 horas
+- `qdr:w` - Última semana
+- `qdr:m` - Último mes
+- `qdr:y` - Último año
+
+Para un filtrado temporal más preciso, puedes especificar rangos de fechas exactos usando el formato de rango de fechas personalizado:
+
+<CodeGroup>
+
+```python Python
+from firecrawl import FirecrawlApp
+
+# Inicializa el cliente con tu clave de API
+app = FirecrawlApp(api_key="fc-YOUR_API_KEY")
+
+# Busca resultados de diciembre de 2024
+search_result = app.search(
+    "firecrawl updates",
+    limit=10,
+    tbs="cdr:1,cd_min:12/1/2024,cd_max:12/31/2024"
+)
+```
+
+```js JavaScript
+import FirecrawlApp from '@mendable/firecrawl-js';
+
+// Inicializa el cliente con tu clave de API
+const app = new FirecrawlApp({apiKey: "fc-YOUR_API_KEY"});
+
+// Busca resultados de diciembre de 2024
+app.search("firecrawl updates", {
+  limit: 10,
+  tbs: "cdr:1,cd_min:12/1/2024,cd_max:12/31/2024"
+})
+.then(searchResult => {
+  console.log(searchResult.data);
+});
+```
+
+```bash cURL
+curl -X POST https://api.firecrawl.dev/v1/search \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer fc-YOUR_API_KEY" \
+  -d '{
+    "query": "firecrawl updates",
+    "limit": 10,
+    "tbs": "cdr:1,cd_min:12/1/2024,cd_max:12/31/2024"
+  }'
+```
+
+</CodeGroup>
+
+<div id="custom-timeout">
+  ### Tiempo de espera personalizado
+</div>
+
+Configura un tiempo de espera personalizado para las operaciones de búsqueda:
+
+<CodeGroup>
+
+```python Python
+from firecrawl import FirecrawlApp
+
+# Inicializa el cliente con tu clave de API
+app = FirecrawlApp(api_key="fc-YOUR_API_KEY")
+
+# Establece un tiempo de espera de 30 segundos
+search_result = app.search(
+    "complex search query",
+    limit=10,
+    timeout=30000  # 30 segundos en milisegundos
+)
+```
+
+```js JavaScript
+import FirecrawlApp from '@mendable/firecrawl-js';
+
+// Inicializa el cliente con tu clave de API
+const app = new FirecrawlApp({apiKey: "fc-YOUR_API_KEY"});
+
+// Establece un tiempo de espera de 30 segundos
+app.search("complex search query", {
+  limit: 10,
+  timeout: 30000  // 30 segundos en milisegundos
+})
+.then(searchResult => {
+  // Procesa los resultados
+  console.log(searchResult.data);
+});
+```
+
+```bash cURL
+curl -X POST https://api.firecrawl.dev/v1/search \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer fc-YOUR_API_KEY" \
+  -d '{
+    "query": "complex search query",
+    "limit": 10,
+    "timeout": 30000
+  }'
+```
+
+</CodeGroup>
+
+<div id="scraping-options">
+  ## Opciones de scraping
+</div>
+
+Al obtener resultados de búsqueda, puedes especificar múltiples formatos de salida y opciones avanzadas de scraping:
+
+<CodeGroup>
+
+```python Python
+from firecrawl import FirecrawlApp, ScrapeOptions
+
+# Initialize the client with your API key
+app = FirecrawlApp(api_key="fc-YOUR_API_KEY")
+
+# Get search results with multiple formats
+search_result = app.search(
+    "firecrawl features",
+    limit=3,
+    scrape_options=ScrapeOptions(formats=["markdown", "html", "links", "screenshot"])
+)
+```
+
+```js JavaScript
+import FirecrawlApp from '@mendable/firecrawl-js';
+
+// Initialize the client with your API key
+const app = new FirecrawlApp({apiKey: "fc-YOUR_API_KEY"});
+
+// Get search results with multiple formats
+app.search("firecrawl features", {
+  limit: 3,
+  scrapeOptions: {
+    formats: ["markdown", "html", "links", "screenshot"]
+  }
+})
+.then(searchResult => {
+  // Process results with various formats
+  console.log(searchResult.data);
+});
+```
+
+```bash cURL
+curl -X POST https://api.firecrawl.dev/v1/search \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer fc-YOUR_API_KEY" \
+  -d '{
+    "query": "firecrawl features",
+    "limit": 3,
+    "scrapeOptions": {
+      "formats": ["markdown", "html", "links", "screenshot"]
+    }
+  }'
+```
+
+</CodeGroup>
+
+Formatos disponibles:
+
+- `markdown`: Contenido en Markdown limpio y formateado
+- `html`: Contenido HTML procesado
+- `rawHtml`: Contenido HTML sin modificar
+- `links`: Lista de enlaces encontrados en la página
+- `screenshot`: Captura de pantalla de la página
+- `screenshot@fullPage`: Captura de pantalla de toda la página
+- `extract`: Extracción de datos estructurados
+
+<div id="cost-implications">
+  ## Implicaciones de costos
+</div>
+
+El uso de este endpoint cuesta 1 crédito por resultado de búsqueda. No hay cargos adicionales por raspados básicos de cada resultado.
+
+Sin embargo, ten en cuenta estos factores de costo:
+
+- **Análisis de PDF**: 1 crédito por página (puede incrementar significativamente los costos en PDFs de varias páginas)
+- **Modo de proxy stealth**: +4 créditos adicionales por resultado de búsqueda
+- ***modo JSON***: +4 créditos adicionales por resultado de búsqueda
+
+Para controlar los costos:
+
+- Configura `parsePDF: false` si no necesitas contenido de PDFs
+- Usa `proxy: "basic"` en lugar de `"stealth"` cuando sea posible
+- Limita la cantidad de resultados con el parámetro `limit`
+
+<div id="advanced-scraping-options">
+  ## Opciones avanzadas de raspado
+</div>
+
+Para más detalles sobre las opciones de raspado, consulta la [documentación de la función Scrape](https://docs.firecrawl.dev/features/scrape). Todo, excepto FIRE-1 (Agente) y Seguimiento de cambios, es compatible con este endpoint de Búsqueda.

@@ -1,0 +1,24 @@
+---
+title: "Raspado"
+openapi: 'v2-openapi POST /scrape'
+---
+
+<div id="whats-new-in-v2">
+  ## Novedades de la v2
+</div>
+
+<div id="new-formats">
+  ### Nuevos formatos
+</div>
+
+- `"summary"` - Obtén un resumen conciso del contenido de la página
+- La extracción en modo JSON ahora usa un formato de objeto: `{ type: "json", prompt, schema }`
+- El formato de captura de pantalla ahora usa un formato de objeto: `{ type: "screenshot", fullPage, quality, viewport }`
+
+<div id="key-improvements">
+  ### Principales mejoras
+</div>
+
+- **Más rápido por defecto**: Las solicitudes se almacenan en caché con `maxAge` predeterminado a 2 días
+- **Valores predeterminados sensatos**: `blockAds`, `skipTlsVerification` y `removeBase64Images` están habilitados por defecto
+- **Opciones de captura de pantalla mejoradas**: Control total de los parámetros de la captura de pantalla usando un objeto

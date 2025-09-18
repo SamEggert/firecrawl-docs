@@ -1,0 +1,83 @@
+---
+title: 'Modo JSON - Extracción con LLM'
+description: 'Extrae datos estructurados de páginas mediante LLM'
+og:title: "Modo JSON | Firecrawl"
+og:description: "Extrae datos estructurados de páginas mediante LLM"
+sidebarTitle: "Modo JSON"
+---
+
+import ExtractCURL from "/snippets/es/v1/llm-extract/base/curl.mdx";
+import ExtractPython from "/snippets/es/v1/llm-extract/base/python.mdx";
+import ExtractNode from "/snippets/es/v1/llm-extract/base/js.mdx";
+import ExtractOutput from "/snippets/es/v1/llm-extract/base/output.mdx";
+import ExtractNoSchemaCURL from "/snippets/es/v1/llm-extract/no-schema/curl.mdx";
+import ExtractNoSchemaOutput from "/snippets/es/v1/llm-extract/no-schema/output.mdx";
+
+
+<div id="scrape-and-extract-structured-data-with-firecrawl">
+  ## Raspado y extracción de datos estructurados con Firecrawl
+</div>
+
+{/* <Warning>Scrape LLM Extract se deprecará en versiones futuras. Usa el nuevo endpoint de [Extracción](/features/extract).</Warning> */}
+
+Firecrawl usa IA para obtener datos estructurados de páginas web en 3 pasos:
+
+1. **Define el esquema:**
+   Indícanos qué datos quieres definiendo un esquema JSON (con el formato de OpenAI) junto con la URL de la página.
+
+2. **Haz la solicitud:**
+   Envía tu URL y el esquema a nuestro endpoint de raspado. Mira cómo hacerlo aquí:
+   [Documentación del endpoint de raspado](https://docs.firecrawl.dev/api-reference/endpoint/scrape)
+
+3. **Obtén tus datos:**
+   Recibe datos limpios y estructurados que se ajustan a tu esquema y que puedes usar de inmediato.
+
+Así, obtener datos web en el formato que necesitas es rápido y sencillo.
+
+<div id="extract-structured-data">
+  ## Extraer datos estructurados
+</div>
+
+<div id="scrape-with-json-endpoint">
+  ### Endpoint /scrape (con JSON)
+</div>
+
+Se usa para extraer datos estructurados de páginas obtenidas mediante raspado.
+
+<CodeGroup>
+
+<ExtractPython />
+<ExtractNode />
+<ExtractCURL />
+
+</CodeGroup>
+
+Salida:
+
+<ExtractOutput />
+
+<div id="extracting-without-schema-new">
+  ### Extracción sin esquema (Nuevo)
+</div>
+
+Ahora puedes extraer sin un esquema con solo pasar un `prompt` al endpoint. El LLM elige la estructura de los datos.
+
+<CodeGroup>
+
+<ExtractNoSchemaCURL />
+
+</CodeGroup>
+
+Resultado:
+
+<ExtractNoSchemaOutput />
+
+<div id="json-options-object">
+  ### Objeto de opciones JSON
+</div>
+
+El objeto `jsonOptions` acepta los siguientes parámetros:
+
+- `schema`: El esquema que se usará para la extracción.
+- `systemPrompt`: El prompt del sistema que se usará para la extracción.
+- `prompt`: El prompt que se usará para la extracción sin un esquema.

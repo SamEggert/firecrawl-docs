@@ -1,0 +1,206 @@
+---
+title: Semana de Lanzamiento III (Novedades)
+description: "Descubre las novedades que llegan a Firecrawl durante la Semana de Lanzamiento III (14–20 de abril)"
+og:title: "Semana de Lanzamiento III | Firecrawl"
+og:description: "Descubre las novedades que llegan a Firecrawl durante la Semana de Lanzamiento III (14–20 de abril)"
+---
+
+<div id="day-7-integration-day">
+  ## Día 7 – Día de Integración
+</div>
+
+![Integraciones de Firecrawl](/images/launch-week/lw3-d7-1.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+En el último día de Launch Week III, presentamos integraciones nuevas y actualizadas que facilitan conectar Firecrawl con las herramientas y plataformas que ya usas.
+
+Desde plataformas de automatización hasta pipelines de IA, Firecrawl ahora se integra con más de 20 servicios, dándote un camino más rápido desde los datos web hasta la ejecución del flujo de trabajo.
+
+<div id="key-integration-updates">
+  ### Actualizaciones clave de integración
+</div>
+
+- **Discord Bot:** Inicia raspados y recibe resultados estructurados directamente en tu servidor. [Más información](https://github.com/mendableai/firecrawl-discord-bot)
+- **Integración con Make:** Crea visualmente flujos de trabajo impulsados por el raspado y la extracción de Firecrawl. [Más información](https://www.make.com/en/integrations/firecrawl)
+- **Integración con n8n:** Conecta Firecrawl a flujos de automatización personalizados. [Más información](https://n8n.io/)
+- **Langflow:** Integra sin fricción agentes de Firecrawl en pipelines de Langflow. [Más información](https://docs.langflow.org/)
+- **LlamaIndex:** Usa Firecrawl con LlamaIndex para enriquecer y recuperar datos de forma inteligente. [Más información](https://www.llamaindex.ai/)
+- **Dify:** Integra Firecrawl con Dify para automatizar flujos de trabajo de IA. [Más información](https://dify.ai/)
+
+Más integraciones están en camino; si echas en falta alguna, nos encantará saberlo.
+
+<div id="day-6-firecrawl-mcp">
+  ## Día 6 – Firecrawl MCP
+</div>
+
+![Firecrawl MCP](/images/launch-week/lw3-d6-1.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+Hoy lanzamos una actualización importante de nuestro servidor Firecrawl MCP, nuestra implementación del Model Context Protocol para flujos de trabajo de scraping conectados a LLM.
+
+Esta versión incorpora compatibilidad con FIRE-1 (Agente) en el MCP, lo que te permite desbloquear datos ocultos tras barreras de interacción como inicios de sesión y botones, todo mediante los endpoints de scrape y extract. 
+
+También presentamos compatibilidad con SSE (Eventos enviados por el servidor) para uso local, lo que facilita la configuración y la integración en tiempo real como nunca antes.
+
+Estas actualizaciones simplifican el streaming de datos web hacia canalizaciones de LLM, con agentes inteligentes encargándose del trabajo pesado.
+
+<div id="key-features">
+  ### Funcionalidades clave
+</div>
+
+* Compatibilidad con FIRE-1: Usa el agente de acciones web a través de los endpoints de scrape y extract de MCP.
+* Consciente de la interacción: Navega automáticamente por barreras web complejas.
+* Compatibilidad con SSE: Transmite la salida en tiempo real, de forma local o desde nuestro servidor MCP alojado.
+* Plug-and-Play: Configuración mínima para integrarlo en tu stack.
+
+<div id="day-5-developer-day">
+  ## Día 5 – Día del Desarrollador
+</div>
+
+![Día del Desarrollador](/images/launch-week/lw3-d5-1.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+Hoy es el turno de los desarrolladores. Estamos lanzando mejoras que hacen que crear con Firecrawl sea más fluido y escalable, ya trabajes en Python, Rust o en tu editor favorito.
+
+Hemos introducido un SDK de Python totalmente asíncrono con parámetros con nombre y tipos de retorno, nuevas funciones potentes en el SDK de Rust, soporte de equipo ampliado en todos los planes y un nuevo tema oscuro de Firecrawl para VSCode y editores compatibles.
+![Python Named Params](/images/launch-week/lw3-d5-3.webp)
+
+<div id="key-features">
+  ### Funciones clave
+</div>
+
+- **Mejoras importantes del SDK de Python**: Se añadieron parámetros con nombre, tipos de retorno y soporte Async a nuestro SDK de Python.
+- **Actualizaciones del SDK de Rust**: Raspado por lotes, cancelación de tareas, generación de llms.txt y búsqueda más inteligente.
+- **Tema oscuro de Firecrawl**: Un tema nuevo y elegante para VSCode, Cursor y Windsurf. Descárgalo aquí.
+- **Mejoras de calidad de vida**: Muchas pequeñas pero significativas mejoras para la experiencia de desarrollo, como eliminar los límites de equipo. Todos los planes ahora incluyen hasta 20 plazas.
+
+<div id="day-4-llmstxtnew">
+  ## Día 4 – llmstxt.new
+</div>
+
+![LLMs.txt (principal)](/images/launch-week/lw3-d4-1.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+Hoy anunciamos [http://llmstxt.new](http://llmstxt.new), la forma más rápida de convertir cualquier sitio web en un archivo de texto limpio y consolidado para LLMs.
+
+Solo añade `llmstxt.new/` delante de cualquier URL y obtendrás un archivo `.txt` plano, optimizado para entrenamiento e inferencia de IA. Sin relleno, sin ruido: solo contenido útil.
+
+Basada en Firecrawl, esta herramienta hace que preparar contenido web real para usarlo en pipelines de LLM sea sencillo.
+
+![Interfaz del generador de LLMs.txt](/images/launch-week/lw3-d4-2.webp)
+
+<div id="key-features">
+  ### Características clave
+</div>
+
+- **Uso instantáneo**: Solo añade `llmstxt.new/` antes de cualquier URL.  
+- **Dos salidas**: `llms.txt` para resúmenes concisos y `llms-full.txt` para el contenido completo.  
+- **Compatible con API**: Accede vía `http://llmstxt.new/{YOUR_URL}` o utiliza una clave de API de Firecrawl para obtener el contenido completo.  
+- **Formato listo para LLM**: Diseñado para contextos de entrenamiento e inferencia.  
+
+<div id="day-3-extract-v2">
+  ## Día 3 – /extract v2
+</div>
+
+![Extract v2 (principal)](/images/launch-week/lw3-d3-l.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+Hoy lanzamos **/extract v2**, una actualización importante de nuestro sistema de extracción, impulsada por el FIRE-1 (Agente).
+
+Con soporte completo para **paginación, flujos de varios pasos e interacciones dinámicas**, extract v2 va mucho más allá de lo que lanzamos en enero. Ahora también es posible extraer datos **sin una URL**, usando una capa de búsqueda integrada para encontrar el contenido que necesitas.
+
+Hemos reconstruido los componentes internos desde cero: modelos mejorados, una arquitectura superior y un rendimiento significativamente mejor en nuestros benchmarks internos.
+
+![Extract v2 en acción](/images/launch-week/lw3-d3-2.webp)
+
+<div id="key-features">
+  ### Características clave
+</div>
+
+- **Integración con FIRE-1**: Gestiona automáticamente las acciones en la página, la navegación y la interacción.  
+- **Extracción multipágina**: Extrae datos en flujos paginados o por pasos.  
+- **No se requiere URL**: Usa la búsqueda integrada para extraer contenido sin un enlace directo.  
+- **Mayor precisión**: Nuevos modelos y una nueva arquitectura ofrecen resultados mejores y más rápidos.  
+
+<div id="day-2-fire-1-agent">
+  ## Día 2 - FIRE-1 (Agente)
+</div>
+
+![Visualización de FIRE-1 (Agente)](/images/launch-week/lw3d2-1.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+Conoce **FIRE-1**, el primer Agente de IA de Firecrawl creado para llevar el scraping web al siguiente nivel. Gracias a su navegación e interacción inteligentes, FIRE-1 puede ir mucho más allá de los métodos tradicionales de scraping.
+
+Desde gestionar la paginación hasta interactuar con elementos dinámicos del sitio como botones y enlaces, FIRE-1 habilita flujos de trabajo potentes de scraping y extracción con conocimiento del contexto.
+![FIRE-1 Agent Visualization](/images/launch-week/lw3-d2-4.webp)
+
+<div id="key-features">
+  ### Funciones clave
+</div>
+
+- **Navegación inteligente**: Avanza automáticamente por contenido paginado o de varios pasos.
+- **Interacción dinámica**: Haz clic en botones, sigue enlaces e interactúa con componentes renderizados con JavaScript.
+
+<div id="day-1-change-tracking">
+  ## Día 1 - Seguimiento de cambios
+</div>
+
+![Vista principal de Seguimiento de cambios](/images/launch-week/lw3d1.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+El Seguimiento de cambios es una función potente que te permite supervisar y detectar cambios en el contenido web a lo largo del tiempo. Está disponible tanto en los SDK de JavaScript como de Python.
+![Seguimiento de cambios](/images/launch-week/lw3d12.webp)
+
+<div id="key-features">
+  ### Funcionalidades clave
+</div>
+
+- **Detectar cambios**: Identifica si una página web ha cambiado desde el último raspado.
+- **Ver cambios específicos**: Accede a información detallada sobre lo que cambió entre raspados.
+- **Datos estructurados**: Recibe datos estructurados sobre los cambios.
+- **Control de visibilidad**: Gestiona la visibilidad de los cambios en tu sitio web.
+
+Usando el formato `changeTracking`, puedes monitorear eficazmente los cambios en un sitio web y recibir información completa sobre la marca temporal del raspado anterior, el resultado de la comparación entre las dos versiones de la página y la visibilidad de la página/URL actual.
+
+<div id="day-0-firecrawl-editor-theme">
+  ## Día 0 - Tema del editor de Firecrawl
+</div>
+
+![Tema del editor de Firecrawl](/images/launch-week/lw3d0.webp)
+
+<div id="overview">
+  ### Descripción general
+</div>
+
+¡Nos entusiasma presentar nuestro tema oficial de Firecrawl para editores! Ya está disponible para la mayoría de los editores, incluidos Cursor, Windsurf y más.
+
+### Características clave
+
+El tema del editor de Firecrawl ofrece una experiencia de programación limpia y enfocada para todos. Nuestra paleta de colores prioriza la legibilidad sin perder la identidad de marca de Firecrawl.
+
+<div id="download">
+  ### Descarga
+</div>
+
+Puedes descargar el tema del editor en el Marketplace de VS Code [aquí](https://firecrawl.link/lw3-editor-theme).

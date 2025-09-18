@@ -1,0 +1,88 @@
+---
+title: 'Modo JSON - Resultado estructurado'
+description: 'Extrae datos estructurados de páginas mediante LLMs'
+og:title: "Modo JSON | Firecrawl"
+og:description: "Extrae datos estructurados de páginas mediante LLMs"
+sidebarTitle: "Modo JSON"
+---
+
+import ExtractCURL from "/snippets/es/v2/scrape/json/base/curl.mdx";
+import ExtractPython from "/snippets/es/v2/scrape/json/base/python.mdx";
+import ExtractNode from "/snippets/es/v2/scrape/json/base/js.mdx";
+import ExtractOutput from "/snippets/es/v2/scrape/json/base/output.mdx";
+import ExtractNoSchemaPython from "/snippets/es/v2/scrape/json/no-schema/python.mdx";
+import ExtractNoSchemaNode from "/snippets/es/v2/scrape/json/no-schema/js.mdx";
+import ExtractNoSchemaCURL from "/snippets/es/v2/scrape/json/no-schema/curl.mdx";
+import ExtractNoSchemaOutput from "/snippets/es/v2/scrape/json/no-schema/output.mdx";
+
+
+<div id="scrape-and-extract-structured-data-with-firecrawl">
+  ## Extrae y estructura datos con Firecrawl
+</div>
+
+Firecrawl usa IA para obtener datos estructurados de páginas web en 3 pasos:
+
+1. **Configura el esquema (opcional):**
+   Define un esquema JSON (usando el formato de OpenAI) para especificar los datos que necesitas, o simplemente proporciona un `prompt` si no requieres un esquema estricto, junto con la URL de la página.
+
+2. **Realiza la solicitud:**
+   Envía tu URL y el esquema a nuestro endpoint de raspado usando el modo JSON. Consulta cómo hacerlo aquí:
+   [Documentación del endpoint de raspado](https://docs.firecrawl.dev/api-reference/endpoint/scrape)
+
+3. **Obtén tus datos:**
+   Recibe datos limpios y estructurados que se ajustan a tu esquema y que puedes usar de inmediato.
+
+Esto hace que obtener datos web en el formato que necesitas sea rápido y sencillo.
+
+<div id="extract-structured-data">
+  ## Extrae datos estructurados
+</div>
+
+<div id="json-mode-via-scrape">
+  ### Modo JSON vía /scrape
+</div>
+
+Se utiliza para extraer datos estructurados de páginas raspadas.
+
+<CodeGroup>
+
+<ExtractPython />
+<ExtractNode />
+<ExtractCURL />
+
+</CodeGroup>
+
+Salida:
+
+<ExtractOutput />
+
+<div id="structured-data-without-schema">
+  ### Datos estructurados sin esquema
+</div>
+
+También puedes extraer sin definir un esquema, simplemente pasando un `prompt` al endpoint. El LLM determina la estructura de los datos.
+
+<CodeGroup>
+
+<ExtractNoSchemaPython />
+<ExtractNoSchemaNode />
+<ExtractNoSchemaCURL />
+
+</CodeGroup>
+
+Salida:
+
+<ExtractNoSchemaOutput />
+
+<div id="json-format-options">
+  ### Opciones de formato JSON
+</div>
+
+Al usar el modo JSON, incluye un objeto en `formats`, por ejemplo:
+
+`formats: [{ type: 'json', schema: { ... }, prompt: '...' }]`
+
+Parámetros:
+
+- `schema`: JSON Schema que describe la salida estructurada que quieres.
+- `prompt`: Solicitud opcional para guiar la extracción (también se usa para la extracción sin esquema).

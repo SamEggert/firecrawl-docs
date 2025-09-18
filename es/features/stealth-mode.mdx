@@ -1,0 +1,64 @@
+---
+title: "Modo sigiloso"
+description: "Usa proxys sigilosos para sitios con soluciones antibot avanzadas"
+og:title: "Modo sigiloso | Firecrawl"
+og:description: "Usa proxys sigilosos para sitios con soluciones antibot avanzadas"
+---
+
+import ProxyPython from "/snippets/es/v2/scrape/proxy/python.mdx";
+import ProxyNode from "/snippets/es/v2/scrape/proxy/js.mdx";
+import ProxyCURL from "/snippets/es/v2/scrape/proxy/curl.mdx";
+import ProxyRetryPython from "/snippets/es/v2/scrape/proxy-retry/python.mdx";
+import ProxyRetryNode from "/snippets/es/v2/scrape/proxy-retry/js.mdx";
+import ProxyRetryCURL from "/snippets/es/v2/scrape/proxy-retry/curl.mdx";
+
+Firecrawl ofrece distintos tipos de proxy para ayudarte a extraer datos de sitios web con diversos niveles de protección antibots. El tipo de proxy puede especificarse mediante el parámetro `proxy`.
+
+
+<div id="proxy-types">
+  ### Tipos de proxy
+</div>
+
+Firecrawl admite tres tipos de proxy:
+
+- **basic**: Proxies para extraer datos de sitios con soluciones anti-bot nulas o básicas. Rápidos y generalmente funcionan.
+- **stealth**: Proxies sigilosos para extraer datos de sitios con soluciones anti-bot avanzadas. Más lentos, pero más confiables en ciertos sitios.
+- **auto**: Firecrawl reintentará automáticamente la extracción con proxies sigilosos si falla el proxy básico. Si el reintento con stealth tiene éxito, se facturarán 5 créditos por la extracción. Si el primer intento con basic tiene éxito, solo se cobrará el costo regular.
+
+Si no especificas un proxy, Firecrawl usará auto por defecto.
+
+<div id="using-stealth-mode">
+  ### Uso del modo stealth
+</div>
+
+Al raspar sitios web con protección anti‑bots avanzada, puedes usar el modo de proxy stealth para mejorar la tasa de éxito.
+
+<CodeGroup>
+
+<ProxyPython />
+
+<ProxyNode />
+
+<ProxyCURL />
+
+</CodeGroup>
+
+**Nota:** Las solicitudes con proxy stealth cuestan 5 créditos por solicitud cuando se utilizan.
+
+<div id="using-stealth-as-a-retry-mechanism">
+  ## Uso de Stealth como mecanismo de reintento
+</div>
+
+Un patrón común es intentar primero el raspado con la configuración de proxy predeterminada y luego reintentar con el modo stealth si encuentras códigos de estado de error específicos (401, 403 o 500) en el campo `metadata.statusCode` de la respuesta. Estos códigos de estado pueden indicar que el sitio web está bloqueando tu solicitud.
+
+<CodeGroup>
+
+<ProxyRetryPython />
+
+<ProxyRetryNode />
+
+<ProxyRetryCURL />
+
+</CodeGroup>
+
+Este enfoque te permite optimizar el uso de créditos al usar el modo stealth solo cuando sea necesario.

@@ -1,0 +1,92 @@
+---
+title: "Seguimiento de cambios (Beta)"
+description: "Firecrawl puede identificar cambios entre la página actual y una versión anterior y decirte si se actualizó o no"
+og:title: "Seguimiento de cambios (Beta) | Firecrawl"
+icon: "code-changeTracking"
+og:description: "Firecrawl puede identificar cambios entre la página actual y una versión anterior y decirte si se actualizó o no"
+---
+
+<div id="this-document-is-outdated">
+  # Este documento está desactualizado
+</div>
+
+Aquí tienes la nueva versión: [Seguimiento de cambios](/es/features/change-tracking)
+
+***
+
+<div id="old-version">
+  # Versión anterior
+</div>
+
+Con el nuevo formato `changeTracking`, puedes monitorear cambios en un sitio web.
+
+El formato `changeTracking` devuelve los siguientes campos en la respuesta:
+
+* `previousScrapeAt`: La marca de tiempo del raspado anterior con el que se está comparando la página actual. (`null` si no hubo raspado previo)
+* `changeStatus`: El resultado de la comparación entre las dos versiones de la página
+  * `new`: Esta página no existía o no se había descubierto antes. (generalmente tiene `previousScrapeAt` en `null`)
+  * `same`: El contenido de esta página no ha cambiado desde el último raspado.
+  * `changed`: El contenido de esta página ha cambiado desde el último raspado.
+  * `removed`: Esta página fue eliminada desde el último raspado.
+* `visibility`: La visibilidad de la página/URL actual.
+  * `visible`: Esta página es visible; significa que su URL se descubrió por una vía orgánica (a través de enlaces en otras páginas visibles o el sitemap).
+  * `hidden`: Esta página no es visible; significa que su URL se descubrió por memoria de rastreos anteriores de la misma URL.
+
+Algunos datos útiles:
+
+* Los raspados siempre se comparan mediante su respuesta en formato markdown.
+  * El formato `markdown` también debe especificarse al usar el formato `changeTracking`. Se pueden especificar otros formatos además de este.
+  * El algoritmo de comparación es resistente a cambios en espacios en blanco y en el orden del contenido. Actualmente se ignoran las URL de origen de iframes para resistir captchas y antibots con URL aleatorias.
+* Los raspados previos con los que se compara actualmente solo se corresponden por la URL de origen, el ID del equipo y el formato `markdown`, y no por ninguna otra opción de raspado o rastreo.
+  * Para una comparación efectiva, la URL de entrada debe ser exactamente la misma que en la solicitud previa para el mismo contenido. Esta es una limitación que estamos trabajando arduamente para superar.
+  * Rastrear las mismas URL con diferentes `includePaths`/`excludePaths` tendrá inconsistencias al usar `changeTracking`.
+  * Raspado de las mismas URL con diferentes `includeTags`/`excludeTags`/`onlyMainContent` tendrá inconsistencias al usar `changeTracking`.
+  * Las páginas también se compararán contra raspados previos que solo tengan el formato `markdown` sin el formato `changeTracking`.
+  * Las comparaciones están limitadas a tu equipo. Si raspas una URL por primera vez con tu clave de API, su `changeStatus` siempre será `new`, incluso si otros usuarios de Firecrawl ya la han raspado antes.
+* Mientras esté en beta, se recomienda monitorear el campo `warning` del documento resultante y manejar el caso en que el objeto `changeTracking` pueda faltar en la respuesta. Estaremos monitoreando el sistema para asegurar que esto ocurra lo menos posible.
+  * Esto puede suceder cuando nuestra consulta a la base de datos para encontrar el raspado previo con el que comparar excede el tiempo límite. Estaremos monitoreando esta situación y publicaremos mejoras y optimizaciones antes de que la función se lance oficialmente.
+* Actualmente no devolvemos un diff del contenido real de la página que cambió.
+  * No sabemos cuál sería el formato óptimo para esto. Si deseas tener el diff, probablemente ya sabes en qué formato lo quieres. Por favor, contáctanos en [mogery@firecrawl.com](mailto:mogery@firecrawl.com), ¡y lo agregaremos!
+
+<div id="examples">
+  ## Ejemplos
+</div>
+
+<div id="scrape">
+  ### Extraer
+</div>
+
+```json
+{
+    "url": "https://firecrawl.dev",
+    "formats": ["markdown", "Seguimiento de cambios"]
+}
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "markdown": "...",
+    "metadata": {...},
+    "changeTracking": {
+      "previousScrapeAt": "2025-03-30T15:07:17.543071+00:00",
+      "changeStatus": "igual",
+      "visibility": "visible"
+    }
+  }
+}
+```
+
+<div id="crawl">
+  ### Crawl
+</div>
+
+```json
+{
+    "url": "https://firecrawl.dev",
+    "scrapeOptions": {
+        "formats": ["markdown", "changeTracking"]
+    }
+}
+```

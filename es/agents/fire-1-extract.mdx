@@ -1,0 +1,169 @@
+---
+title: "FIRE-1 (Agente) (Beta)"
+sidebarTitle: "FIRE-1 (Beta)"
+description: "FIRE-1 es un agente de IA que permite la navegación e interacción inteligente con páginas web"
+og:title: "FIRE-1 AI Agent (Beta) | Firecrawl"
+og:description: "FIRE-1 es un agente de IA que permite la navegación e interacción inteligente con páginas web"
+icon: "robot"
+---
+
+FIRE-1 es un agente de IA que potencia las capacidades de raspado de Firecrawl mediante navegación e interacción web inteligentes. Puede gestionar la paginación, controlar acciones del navegador y desplazarse por estructuras web complejas para permitir una extracción de datos completa que va más allá de los métodos de raspado tradicionales.
+
+<div id="what-fire-1-can-do">
+  ### Qué puede hacer FIRE-1:
+</div>
+
+- Navegar automáticamente por contenido paginado.
+- Interactuar con botones, enlaces, campos de entrada y elementos dinámicos.
+- Realizar tareas de extracción avanzadas en varias páginas.
+
+<div id="enabling-fire-1-agent">
+  ## Habilitar FIRE-1 (Agente)
+</div>
+
+Para habilitar el agente FIRE-1, debes incluir el objeto `agent` dentro del payload de tu solicitud a la API para los endpoints `scrape` o `extract`.
+
+El objeto `agent` tiene las siguientes propiedades:
+
+*   `model` (string, opcional): Especifica el modelo de IA a usar. Si no se proporciona, el valor predeterminado es `FIRE-1`. Actualmente, `FIRE-1` es el único modelo disponible.
+*   `prompt` (string, requerido para el endpoint `scrape`): Proporciona instrucciones para el agente de IA, indicando qué contenido buscar y cómo navegar por el sitio web (por ejemplo, cómo manejar la paginación, qué botones pulsar, etc.). En `/extract` se usará el prompt proporcionado en el parámetro `prompt`.
+
+<div id="using-fire-1-with-the-scrape-endpoint">
+  ### Uso de FIRE-1 con el endpoint Scrape
+</div>
+
+Puedes usar el agente FIRE-1 con el endpoint `/v1/scrape` para aplicar navegación inteligente antes de extraer el contenido final.
+
+**Ejemplo (cURL):**
+
+```bash
+curl -X POST https://api.firecrawl.dev/v1/scrape \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer TU_API_KEY' \
+    -d '{
+      "url": "https://example.com/products?page=1",
+      "formats": ["markdown"],
+      "agent": {
+        "model": "FIRE-1",
+        "prompt": "Navega por las listas de productos haciendo clic en el botón «Siguiente página» hasta que esté desactivado. Extrae el contenido de cada página visitada."
+      }
+    }'
+```
+
+En este ejemplo, se indica al agente FIRE-1 que navegue por las páginas de listados de productos antes de que se realice el raspado final.
+
+
+<div id="using-fire-1-with-the-extract-endpoint">
+  ### Uso de FIRE-1 con el endpoint de Extracción
+</div>
+
+De manera similar, puedes utilizar el agente FIRE-1 con el endpoint `/v1/extract` para tareas de extracción complejas que requieren navegar por varias páginas o interactuar con elementos.
+
+**Ejemplo (cURL):**
+
+```bash
+curl -X POST https://api.firecrawl.dev/v1/extract \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer YOUR_API_KEY' \
+    -d '{
+      "urls": ["https://example-forum.com/topic/123"],
+      "prompt": "Extrae todos los comentarios de los usuarios de este hilo del foro.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "author": {"type": "string"},
+                "comment_text": {"type": "string"}
+              },
+              "required": ["author", "comment_text"]
+            }
+          }
+        },
+        "required": ["comments"]
+      },
+      "agent": {
+        "model": "FIRE-1"
+      }
+    }'
+```
+
+Aquí, el agente se asegura de que todos los comentarios se carguen en la página interactuando con el botón «Load More Comments» antes de que comience el proceso de extracción, según el esquema y el prompt proporcionados.
+**Nota:** El agente FIRE-1 ofrece capacidades potentes, pero puede consumir más créditos según la complejidad de las instrucciones de navegación y la cantidad de páginas con las que se interactúe.
+
+
+<div id="meet-fire-1-intelligent-navigation-and-interaction">
+  ### Conoce FIRE-1: navegación e interacción inteligentes
+</div>
+
+![FIRE-1 Agent Visualization](/launch-week/lw3-d2-3.webp)
+
+FIRE-1 aporta un nuevo nivel de inteligencia a Firecrawl, potenciando tus tareas de raspado al navegar estructuras web complejas, manejar la paginación, interactuar con contenido dinámico y más. Este potente agente de IA garantiza una extracción de datos completa que va más allá de los métodos de raspado tradicionales.
+
+<div id="what-fire-1-can-do">
+  ### Qué puede hacer FIRE-1:
+</div>
+
+- Navegar automáticamente por contenido paginado.
+- Interactuar con botones, enlaces y elementos dinámicos.
+- Realizar tareas avanzadas de extracción en múltiples páginas.
+
+<div id="how-to-enable-fire-1">
+  ## Cómo habilitar FIRE-1
+</div>
+
+Habilitar FIRE-1 es sencillo. Solo tienes que incluir un objeto `agent` en tu solicitud a la API de raspado o extracción:
+
+```json
+"agent": {
+  "model": "FIRE-1",
+  "prompt": "Aquí van tus instrucciones de navegación detalladas."
+}
+```
+
+*Nota:* El campo `prompt` es obligatorio en las solicitudes de raspado y le indica a FIRE-1 con precisión cómo interactuar con la página web.
+
+
+<div id="example-usage-with-scrape-endpoint">
+  ## Ejemplo de uso con el endpoint de Scrape
+</div>
+
+Aquí tienes un ejemplo rápido de cómo usar FIRE-1 con el endpoint de scrape para paginar por listados de productos:
+
+```bash
+curl -X POST https://api.firecrawl.dev/v1/scrape \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer TU_API_KEY' \
+  -d '{
+    "url": "https://example.com/products?page=1",
+    "formats": ["markdown"],
+    "agent": {
+      "model": "FIRE-1",
+      "prompt": "Navega por las listas de productos haciendo clic en el botón \"Siguiente página\" hasta que esté deshabilitado. Extrae el contenido de cada página."
+    }
+  }'
+```
+
+En este escenario, FIRE-1 navega la paginación de manera inteligente y reúne todos los productos.
+
+
+<div id="considerations">
+  ## Consideraciones
+</div>
+
+- El uso de FIRE-1 puede consumir más créditos según la complejidad de la tarea y la profundidad de la interacción.
+- Asegúrate de que tus indicaciones guíen claramente a FIRE-1 para optimizar los resultados y la eficiencia.
+
+<div id="start-using-fire-1-today">
+  ## Comienza a usar FIRE-1 hoy
+</div>
+
+Descubre hoy el futuro del scraping web:
+
+- **Prueba FIRE-1:** Integra navegación inteligente en tus flujos de trabajo de scraping y extracción.
+- **Explora la documentación:** Obtén más información en nuestra [documentación completa](https://docs.firecrawl.dev/agents/fire-1).
+- **¿Necesitas ayuda?** Únete a nuestra [comunidad en Discord](https://discord.gg/S7Enyh9Abh) o escribe a [help@firecrawl.com](mailto:help@firecrawl.com).
+**¿Listo para aprovechar el scraping con IA?** [Regístrate en Firecrawl](https://firecrawl.dev/signup) y empieza con FIRE-1 hoy.
