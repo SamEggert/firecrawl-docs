@@ -1,0 +1,22 @@
+```js Node
+import FirecrawlApp, { ScrapeResponse } from '@mendable/firecrawl-js';
+
+const app = new FirecrawlApp({apiKey: "fc-YOUR_API_KEY"});
+
+// Raspar varios sitios web (sincrónico):
+const batchScrapeResult = await app.batchScrapeUrls(['firecrawl.dev', 'mendable.ai'], { formats: ['markdown', 'html'] });
+
+if (!batchScrapeResult.success) {
+  throw new Error(`No se pudo raspar: ${batchScrapeResult.error}`)
+}
+// Mostrar todos los resultados del raspado por lotes:
+console.log(batchScrapeResult)
+
+// O también puedes usar el método asíncrono:
+const batchScrapeJob = await app.asyncBulkScrapeUrls(['firecrawl.dev', 'mendable.ai'], { formats: ['markdown', 'html'] });
+console.log(batchScrapeJob)
+
+// (async) Luego puedes usar el ID del trabajo para consultar el estado del raspado por lotes:
+const batchScrapeStatus = await app.checkBatchScrapeStatus(batchScrapeJob.id);
+console.log(batchScrapeStatus)
+```

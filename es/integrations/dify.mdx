@@ -1,0 +1,64 @@
+---
+title: "Dify"
+description: "Aprende a usar Firecrawl en Dify"
+og:title: "Dify | Firecrawl"
+og:description: "Aprende a usar Firecrawl en Dify"
+---
+
+<div id="sync-data-from-websites-for-dify-workflows">
+  ## Sincroniza datos de sitios web para flujos de trabajo de Dify
+</div>
+
+Firecrawl puede utilizarse dentro de [Dify, el constructor de flujos de trabajo para LLM](https://cloud.dify.ai/). Esta página explica cómo extraer datos de una página web, convertirlos a Markdown e importarlos en la base de conocimientos de Dify usando su integración con Firecrawl.
+
+<div id="configuring-firecrawl">
+  ### Configuración de Firecrawl
+</div>
+
+Primero, debes configurar las credenciales de Firecrawl en la sección Fuente de datos de la página de Configuración.
+
+<img
+  className="block"
+  src="/images/fc_dify_config.avif"
+  alt="Configurar clave de Firecrawl"
+/>
+
+Inicia sesión en tu cuenta de Firecrawl, obtén tu clave de API y luego introdúcela y guárdala en Dify.
+
+<img
+  className="block"
+  src="/images/fc_dify_savekey.png"
+  alt="Guardar clave de Firecrawl"
+/>
+
+<div id="scrape-target-webpage">
+  ### Raspado de la página web de destino
+</div>
+
+Ahora viene la parte divertida: raspar y rastrear. En la página de creación de la base de conocimientos, selecciona Sync from website e introduce la URL que se va a raspar.
+
+<img
+  className="block"
+  src="/images/fc_dify_webscrape.webp"
+  alt="Configuración de raspado"
+/>
+
+Las opciones de configuración incluyen: si se deben rastrear subpáginas, límite de rastreo de páginas, profundidad máxima de raspado por página, rutas excluidas, incluir solo rutas y alcance de extracción de contenido. Cuando termines la configuración, haz clic en Run para previsualizar las páginas procesadas.
+
+<img
+  className="block"
+  src="/images/fc_dify_fcoptions.webp"
+  alt="Configurar Firecrawl"
+/>
+
+<div id="review-import-results">
+  ### Revisar los resultados de la importación
+</div>
+
+Después de importar el texto parseado desde la página web, se almacena en los documentos de la base de conocimiento. Revisa los resultados de la importación y haz clic en Add URL para seguir importando nuevas páginas web.
+
+<img
+  className="block"
+  src="/images/fc_dify_results.webp"
+  alt="Ver los resultados del raspado de Firecrawl"
+/>

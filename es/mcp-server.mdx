@@ -1,0 +1,720 @@
+---
+title: Servidor MCP de Firecrawl
+description: "Utiliza la API de Firecrawl a través del Model Context Protocol"
+og:title: "Servidor MCP de Firecrawl"
+og:description: "Los servidores MCP de Firecrawl te permiten utilizar la API de Firecrawl a través del Model Context Protocol"
+sidebarTitle: "Servidor MCP"
+---
+
+Una implementación de servidor del Model Context Protocol (MCP) que integra [Firecrawl](https://github.com/mendableai/firecrawl) para ofrecer capacidades de scraping web. Nuestro servidor MCP es de código abierto y está disponible en [GitHub](https://github.com/mendableai/firecrawl-mcp-server).
+
+<div id="features">
+  ## Funcionalidades
+</div>
+
+- Raspado web, rastreo y descubrimiento
+- Búsqueda y extracción de contenido
+- Investigación en profundidad y raspado por lotes
+- Compatibilidad en la nube y autoservicio
+- Compatibilidad con SSE
+
+<div id="installation">
+  ## Instalación
+</div>
+
+Puedes usar nuestra URL alojada de forma remota o ejecutar el servidor localmente. Obtén tu clave de API en [https://firecrawl.dev/app/api-keys](https://www.firecrawl.dev/app/api-keys)
+
+<div id="remote-hosted-url">
+  ### URL alojada remotamente
+</div>
+
+```bash
+https://mcp.firecrawl.dev/{FIRECRAWL_API_KEY}/v2/sse
+```
+
+
+<div id="running-with-npx">
+  ### Ejecutar con npx
+</div>
+
+```bash
+env FIRECRAWL_API_KEY=fc-TU_API_KEY npx -y firecrawl-mcp
+```
+
+
+<div id="manual-installation">
+  ### Instalación manual
+</div>
+
+```bash
+npm install -g firecrawl-mcp
+```
+
+> Prueba [nuestro servidor MCP en el playground de MCP.so](https://mcp.so/playground?server=firecrawl-mcp-server) o en [Klavis AI](https://www.klavis.ai/mcp-servers).
+
+
+<div id="running-on-cursor">
+  ### Ejecutar en Cursor
+</div>
+
+<a href="cursor://anysphere.cursor-deeplink/mcp/install?name=firecrawl&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImZpcmVjcmF3bC1tY3AiXSwiZW52Ijp7IkZJUkVDUkFXTF9BUElfS0VZIjoiWU9VUi1BUEktS0VZIn19"><img src="https://cursor.com/deeplink/mcp-install-dark.png" alt="Añadir el servidor MCP de Firecrawl a Cursor" style={{ maxHeight: 32 }} /></a>
+
+<div id="manual-installation">
+  #### Instalación manual
+</div>
+
+Configuración de Cursor 🖥️
+Nota: Requiere Cursor versión 0.45.6 o superior.
+Para obtener las instrucciones de configuración más recientes, consulta la documentación oficial de Cursor sobre cómo configurar servidores MCP:
+[Guía de configuración de servidores MCP de Cursor](https://docs.cursor.com/context/model-context-protocol#configuring-mcp-servers)
+
+Para configurar Firecrawl MCP en Cursor **v0.48.6**
+
+1. Abre la configuración de Cursor.
+2. Ve a Features > MCP Servers.
+3. Haz clic en "+ Add new global MCP server".
+4. Ingresa el siguiente código:
+   ```json
+   {
+     "mcpServers": {
+       "firecrawl-mcp": {
+         "command": "npx",
+         "args": ["-y", "firecrawl-mcp"],
+         "env": {
+           "FIRECRAWL_API_KEY": "YOUR-API-KEY"
+         }
+       }
+     }
+   }
+   ```
+
+Para configurar Firecrawl MCP en Cursor **v0.45.6**
+
+1. Abre la configuración de Cursor.
+2. Ve a Features > MCP Servers.
+3. Haz clic en "+ Add New MCP Server".
+4. Ingresa lo siguiente:
+   - Name: "firecrawl-mcp" (o el nombre que prefieras)
+   - Type: "command"
+   - Command: `env FIRECRAWL_API_KEY=your-api-key npx -y firecrawl-mcp`
+
+> Si usas Windows y tienes problemas, prueba `cmd /c "set FIRECRAWL_API_KEY=your-api-key && npx -y firecrawl-mcp"`
+
+Reemplaza `your-api-key` con tu clave de API de Firecrawl. Si aún no tienes una, puedes crear una cuenta y obtenerla en https://www.firecrawl.dev/app/api-keys
+
+Después de agregarlo, actualiza la lista de servidores MCP para ver las nuevas herramientas. El Composer Agent usará automáticamente Firecrawl MCP cuando corresponda, pero también puedes solicitarlo explícitamente describiendo tus necesidades de web scraping. Accede al Composer con Command+L (Mac), selecciona "Agent" junto al botón de enviar e ingresa tu consulta.
+
+<div id="running-on-windsurf">
+  ### Ejecutar en Windsurf
+</div>
+
+Agrega esto a `./codeium/windsurf/model_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+
+<div id="running-with-sse-mode">
+  ### Ejecutar en modo SSE
+</div>
+
+Para ejecutar el servidor localmente usando SSE (Eventos enviados por el servidor) en lugar del transporte stdio predeterminado:
+
+```bash
+env SSE_LOCAL=true FIRECRAWL_API_KEY=fc-TU_API_KEY npx -y firecrawl-mcp
+```
+
+Usa la URL: http://localhost:3000/v2/sse o https://mcp.firecrawl.dev/{FIRECRAWL_API_KEY}/v2/sse
+
+
+<div id="installing-via-smithery-legacy">
+  ### Instalación mediante Smithery (heredado)
+</div>
+
+Para instalar Firecrawl para Claude Desktop automáticamente mediante [Smithery](https://smithery.ai/server/@mendableai/mcp-server-firecrawl):
+
+```bash
+npx -y @smithery/cli install @mendableai/mcp-server-firecrawl --client claude
+```
+
+
+<div id="running-on-vs-code">
+  ### Ejecutar en VS Code
+</div>
+
+Para instalar con un clic, haz clic en uno de los botones de instalación a continuación...
+
+[![Instalar con NPX en VS Code](https://img.shields.io/badge/VS_Code-NPM-0098FF?style=flat-square\&logo=visualstudiocode\&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=firecrawl\&inputs=%5B%7B%22type%22%3A%22promptString%22%2C%22id%22%3A%22apiKey%22%2C%22description%22%3A%22Firecrawl%20API%20Key%22%2C%22password%22%3Atrue%7D%5D\&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22firecrawl-mcp%22%5D%2C%22env%22%3A%7B%22FIRECRAWL_API_KEY%22%3A%22%24%7Binput%3AapiKey%7D%22%7D%7D) [![Instalar con NPX en VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-NPM-24bfa5?style=flat-square\&logo=visualstudiocode\&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=firecrawl\&inputs=%5B%7B%22type%22%3A%22promptString%22%2C%22id%22%3A%22apiKey%22%2C%22description%22%3A%22Firecrawl%20API%20Key%22%2C%22password%22%3Atrue%7D%5D\&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22firecrawl-mcp%22%5D%2C%22env%22%3A%7B%22FIRECRAWL_API_KEY%22%3A%22%24%7Binput%3AapiKey%7D%22%7D%7D\&quality=insiders)
+
+Para la instalación manual, añade el siguiente bloque JSON a tu archivo de configuración de usuario (JSON) en VS Code. Puedes hacerlo presionando Ctrl + Shift + P y escribiendo Preferences: Open User Settings (JSON).
+
+```json
+{
+  "mcp": {
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "apiKey",
+        "description": "Clave de la API de Firecrawl"
+        "password": true
+      }
+    ],
+    "servers": {
+      "firecrawl": {
+        "command": "npx",
+        "args": ["-y", "firecrawl-mcp"],
+        "env": {
+          "FIRECRAWL_API_KEY": "${input:apiKey}"
+        }
+      }
+    }
+  }
+}
+```
+
+Opcionalmente, puedes añadirlo a un archivo llamado `.vscode/mcp.json` en tu espacio de trabajo. Esto te permitirá compartir la configuración con otras personas:
+
+```json
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "apiKey",
+      "description": "Clave de la API de Firecrawl",
+      "password": true
+    }
+  ],
+  "servers": {
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${input:apiKey}"
+      }
+    }
+  }
+}
+```
+
+
+<div id="running-on-claude-desktop">
+  ### Ejecutar en Claude Desktop
+</div>
+
+Añade esto al archivo de configuración de Claude:
+
+```json
+{
+  "mcpServers": {
+    "firecrawl": {
+      "url": "https://mcp.firecrawl.dev/{YOUR_API_KEY}/v2/sse"
+    }
+  }
+}
+```
+
+
+<div id="running-on-claude-code">
+  ### Ejecutar en Claude Code
+</div>
+
+Agrega el servidor MCP de Firecrawl usando la CLI de Claude Code:
+
+```bash
+claude mcp add firecrawl -e FIRECRAWL_API_KEY=tu-api-key -- npx -y firecrawl-mcp
+```
+
+
+<div id="configuration">
+  ## Configuración
+</div>
+
+<div id="environment-variables">
+  ### Variables de entorno
+</div>
+
+<div id="required-for-cloud-api">
+  #### Requerido para la API en la nube
+</div>
+
+- `FIRECRAWL_API_KEY`: Tu clave de API de Firecrawl
+  - Obligatorio al usar la API en la nube (por defecto)
+  - Opcional si usas una instancia autohospedada con `FIRECRAWL_API_URL`
+- `FIRECRAWL_API_URL` (opcional): Endpoint de API personalizado para instancias autohospedadas
+  - Ejemplo: `https://firecrawl.your-domain.com`
+  - Si no se proporciona, se usará la API en la nube (requiere clave de API)
+
+<div id="optional-configuration">
+  #### Configuración opcional
+</div>
+
+<div id="retry-configuration">
+  ##### Configuración de reintentos
+</div>
+
+- `FIRECRAWL_RETRY_MAX_ATTEMPTS`: Número máximo de reintentos (predeterminado: 3)
+- `FIRECRAWL_RETRY_INITIAL_DELAY`: Espera inicial en milisegundos antes del primer reintento (predeterminado: 1000)
+- `FIRECRAWL_RETRY_MAX_DELAY`: Espera máxima en milisegundos entre reintentos (predeterminado: 10000)
+- `FIRECRAWL_RETRY_BACKOFF_FACTOR`: Factor de backoff exponencial (predeterminado: 2)
+
+<div id="credit-usage-monitoring">
+  ##### Monitoreo del uso de créditos
+</div>
+
+- `FIRECRAWL_CREDIT_WARNING_THRESHOLD`: Umbral de advertencia para el uso de créditos (por defecto: 1000)
+- `FIRECRAWL_CREDIT_CRITICAL_THRESHOLD`: Umbral crítico para el uso de créditos (por defecto: 100)
+
+<div id="configuration-examples">
+  ### Ejemplos de configuración
+</div>
+
+Para usar la API en la nube con reintentos personalizados y control de créditos:
+
+```bash
+# Requerido para la API en la nube
+export FIRECRAWL_API_KEY=your-api-key
+
+# Configuración opcional de reintentos
+export FIRECRAWL_RETRY_MAX_ATTEMPTS=5        # Aumenta el número máximo de reintentos
+export FIRECRAWL_RETRY_INITIAL_DELAY=2000    # Comienza con un retraso de 2 s
+export FIRECRAWL_RETRY_MAX_DELAY=30000       # Retraso máximo de 30 s
+export FIRECRAWL_RETRY_BACKOFF_FACTOR=3      # Backoff más agresivo
+
+# Supervisión opcional de créditos
+export FIRECRAWL_CREDIT_WARNING_THRESHOLD=2000    # Advertencia a los 2000 créditos
+export FIRECRAWL_CREDIT_CRITICAL_THRESHOLD=500    # Crítico a los 500 créditos
+```
+
+Para instancias autogestionadas:
+
+```bash
+# Requerido para instalaciones autogestionadas (self-hosted)
+export FIRECRAWL_API_URL=https://firecrawl.tu-dominio.com
+
+# Autenticación opcional para instalaciones autogestionadas (self-hosted)
+export FIRECRAWL_API_KEY=your-api-key  # Si tu instancia requiere autenticación
+
+# Configuración personalizada de reintentos
+export FIRECRAWL_RETRY_MAX_ATTEMPTS=10
+export FIRECRAWL_RETRY_INITIAL_DELAY=500     # Comienza con reintentos más rápidos
+```
+
+
+<div id="custom-configuration-with-claude-desktop">
+  ### Configuración personalizada con Claude Desktop
+</div>
+
+Agrega lo siguiente a tu `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "TU_API_KEY_AQUI",
+
+        "FIRECRAWL_RETRY_MAX_ATTEMPTS": "5",
+        "FIRECRAWL_RETRY_INITIAL_DELAY": "2000",
+        "FIRECRAWL_RETRY_MAX_DELAY": "30000",
+        "FIRECRAWL_RETRY_BACKOFF_FACTOR": "3",
+
+        "FIRECRAWL_CREDIT_WARNING_THRESHOLD": "2000",
+        "FIRECRAWL_CREDIT_CRITICAL_THRESHOLD": "500"
+      }
+    }
+  }
+}
+```
+
+
+<div id="system-configuration">
+  ### Configuración del sistema
+</div>
+
+El servidor incluye varios parámetros configurables que se pueden definir mediante variables de entorno. Estos son los valores predeterminados si no se especifican:
+
+```typescript
+const CONFIG = {
+  retry: {
+    maxAttempts: 3, // Número de reintentos para solicitudes limitadas por límites de velocidad
+    initialDelay: 1000, // Retraso inicial antes del primer reintento (en milisegundos)
+    maxDelay: 10000, // Retraso máximo entre reintentos (en milisegundos)
+    backoffFactor: 2, // Multiplicador para el backoff exponencial
+  },
+  credit: {
+    warningThreshold: 1000, // Avisar cuando el uso de crédito alcance este nivel
+    criticalThreshold: 100, // Alerta crítica cuando el uso de crédito alcance este nivel
+  },
+};
+```
+
+Estas configuraciones controlan:
+
+1. **Comportamiento de reintento**
+
+   * Reintenta automáticamente las solicitudes fallidas debido a límites de velocidad
+   * Usa backoff exponencial para evitar sobrecargar la API
+   * Ejemplo: Con la configuración predeterminada, los reintentos se realizarán en:
+     * 1.er reintento: 1 segundo de espera
+     * 2.º reintento: 2 segundos de espera
+     * 3.er reintento: 4 segundos de espera (con tope en maxDelay)
+
+2. **Monitoreo del uso de créditos**
+   * Supervisa el consumo de créditos de la API en la nube
+   * Emite avisos en umbrales específicos
+   * Ayuda a prevenir interrupciones inesperadas del servicio
+   * Ejemplo: Con la configuración predeterminada:
+     * Aviso con 1000 créditos restantes
+     * Alerta crítica con 100 créditos restantes
+
+
+<div id="rate-limiting-and-batch-processing">
+  ### Límites de velocidad y procesamiento por lotes
+</div>
+
+El servidor utiliza las capacidades integradas de Firecrawl para los límites de velocidad y el procesamiento por lotes:
+
+- Gestión automática de límites de velocidad con backoff exponencial
+- Procesamiento paralelo eficiente para operaciones por lotes
+- Encolado y limitación inteligente de solicitudes
+- Reintentos automáticos ante errores transitorios
+
+<div id="available-tools">
+  ## Herramientas disponibles
+</div>
+
+<div id="1-scrape-tool-firecrawl_scrape">
+  ### 1. Herramienta de raspado (`firecrawl_scrape`)
+</div>
+
+Extrae contenido de una única URL con opciones avanzadas.
+
+```json
+{
+  "name": "firecrawl_scrape",
+  "arguments": {
+    "url": "https://example.com",
+    "formats": ["markdown"],
+    "onlyMainContent": true,
+    "waitFor": 1000,
+    "timeout": 30000,
+    "mobile": false,
+    "includeTags": ["article", "main"],
+    "excludeTags": ["nav", "footer"],
+    "skipTlsVerification": false
+  }
+}
+```
+
+
+<div id="2-batch-scrape-tool-firecrawl_batch_scrape">
+  ### 2. Herramienta de Raspado por lotes (`firecrawl_batch_scrape`)
+</div>
+
+Raspa múltiples URL de forma eficiente con límites de velocidad integrados y procesamiento en paralelo.
+
+```json
+{
+  "name": "firecrawl_batch_scrape",
+  "arguments": {
+    "urls": ["https://example1.com", "https://example2.com"],
+    "options": {
+      "formats": ["markdown"],
+      "soloContenidoPrincipal": true
+    }
+  }
+}
+```
+
+La respuesta incluye el ID de la operación para comprobar el estado:
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Operación por lotes encolada con ID: batch_1. Usa firecrawl_check_batch_status para consultar el progreso."
+    }
+  ],
+  "isError": false
+}
+```
+
+
+<div id="3-check-batch-status-firecrawl_check_batch_status">
+  ### 3. Comprobar el estado del lote (`firecrawl_check_batch_status`)
+</div>
+
+Comprueba el estado de una operación por lotes.
+
+```json
+{
+  "name": "firecrawl_check_batch_status",
+  "arguments": {
+    "id": "batch_1"
+  }
+}
+```
+
+
+<div id="4-search-tool-firecrawl_search">
+  ### 4. Herramienta de búsqueda (`firecrawl_search`)
+</div>
+
+Busca en la web y, de forma opcional, extrae contenido de los resultados de búsqueda.
+
+```json
+{
+  "name": "firecrawl_search",
+  "arguments": {
+    "query": "tu consulta de búsqueda",
+    "limit": 5,
+    "lang": "es",
+    "country": "es",
+    "scrapeOptions": {
+      "formats": ["markdown"],
+      "onlyMainContent": true
+    }
+  }
+}
+```
+
+
+<div id="5-crawl-tool-firecrawl_crawl">
+  ### 5. Herramienta de rastreo (`firecrawl_crawl`)
+</div>
+
+Inicia un rastreo asíncrono con opciones avanzadas.
+
+```json
+{
+  "name": "firecrawl_crawl",
+  "arguments": {
+    "url": "https://example.com",
+    "maxDepth": 2,
+    "limit": 100,
+    "allowExternalLinks": false,
+    "deduplicateSimilarURLs": true
+  }
+}
+```
+
+
+<div id="6-extract-tool-firecrawl_extract">
+  ### 6. Herramienta de extracción (`firecrawl_extract`)
+</div>
+
+Extrae información estructurada de páginas web usando capacidades de LLM. Compatible tanto con IA en la nube como con extracción mediante LLM autoalojados.
+
+```json
+{
+  "name": "firecrawl_extract",
+  "arguments": {
+    "urls": ["https://example.com/page1", "https://example.com/page2"],
+    "prompt": "Extrae la información del producto, incluidos el nombre, el precio y la descripción",
+    "systemPrompt": "Eres un asistente útil que extrae información de productos",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "description": { "type": "string" }
+      },
+      "required": ["name", "price"]
+    },
+    "allowExternalLinks": false,
+    "enableWebSearch": false,
+    "includeSubdomains": false
+  }
+}
+```
+
+Ejemplo de respuesta:
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": {
+        "name": "Producto de ejemplo",
+        "price": 99.99,
+        "description": "Descripción de producto de ejemplo"
+      }
+    }
+  ],
+  "isError": false
+}
+```
+
+
+<div id="extract-tool-options">
+  #### Opciones de la herramienta Extract:
+</div>
+
+- `urls`: Lista de URLs de las que extraer información
+- `prompt`: Prompt personalizado para la extracción con el LLM
+- `systemPrompt`: Prompt del sistema para guiar al LLM
+- `schema`: Esquema JSON para extraer datos estructurados
+- `allowExternalLinks`: Permitir la extracción desde enlaces externos
+- `enableWebSearch`: Habilitar la búsqueda web para obtener contexto adicional
+- `includeSubdomains`: Incluir subdominios en la extracción
+
+Al usar una instancia autoalojada, la extracción utilizará tu LLM configurado. En la API en la nube, se usa el servicio de LLM gestionado de Firecrawl.
+
+### 7. Herramienta de investigación profunda (firecrawl&#95;deep&#95;research)
+
+Realiza una investigación web en profundidad sobre una consulta mediante rastreo inteligente, búsqueda y análisis con LLM.
+
+```json
+{
+  "name": "firecrawl_deep_research",
+  "arguments": {
+    "query": "¿Cómo funciona la tecnología de captura de carbono?",
+    "maxDepth": 3,
+    "timeLimit": 120,
+    "maxUrls": 50
+  }
+}
+```
+
+Argumentos:
+
+* query (string, obligatorio): La pregunta de investigación o el tema a explorar.
+* maxDepth (number, opcional): Profundidad máxima de recursión para el rastreo/búsqueda (valor predeterminado: 3).
+* timeLimit (number, opcional): Límite de tiempo en segundos para la sesión de investigación (valor predeterminado: 120).
+* maxUrls (number, opcional): Número máximo de URL a analizar (valor predeterminado: 50).
+
+Devuelve:
+
+* Análisis final generado por un LLM a partir de la investigación. (data.finalAnalysis)
+* También puede incluir actividades estructuradas y las fuentes utilizadas durante el proceso de investigación.
+
+
+### 8. Generar la herramienta LLMs.txt (firecrawl&#95;generate&#95;llmstxt)
+
+Genera un archivo llms.txt estandarizado (y, opcionalmente, llms-full.txt) para un dominio específico. Este archivo define cómo deben interactuar los modelos de lenguaje de gran tamaño con el sitio.
+
+```json
+{
+  "name": "firecrawl_generate_llmstxt",
+  "arguments": {
+    "url": "https://example.com",
+    "maxUrls": 20,
+    "showFullText": true
+  }
+}
+```
+
+Argumentos:
+
+* url (string, requerido): La URL base del sitio web a analizar.
+* maxUrls (number, opcional): Número máximo de URL a incluir (predeterminado: 10).
+* showFullText (boolean, opcional): Indica si se debe incluir el contenido de llms-full.txt en la respuesta.
+
+Devuelve:
+
+* Contenido generado del archivo llms.txt y, opcionalmente, de llms-full.txt (data.llmstxt y/o data.llmsfulltxt)
+
+
+<div id="logging-system">
+  ## Sistema de registros
+</div>
+
+El servidor incluye registros completos:
+
+* Estado y progreso de las operaciones
+* Métricas de rendimiento
+* Monitoreo del uso de créditos
+* Seguimiento de límites de velocidad
+* Condiciones de error
+
+Ejemplos de mensajes de registro:
+
+```
+[INFO] Servidor MCP de Firecrawl inicializado correctamente
+[INFO] Iniciando scrape para la URL: https://example.com
+[INFO] Operación por lotes encolada con ID: batch_1
+[WARNING] El uso de créditos alcanzó el umbral de advertencia
+[ERROR] Límite de velocidad superado, reintentando en 2 s...
+```
+
+
+<div id="error-handling">
+  ## Gestión de errores
+</div>
+
+El servidor ofrece una gestión de errores sólida:
+
+* Reintentos automáticos ante errores transitorios
+* Gestión de límites de velocidad con backoff
+* Mensajes de error detallados
+* Advertencias sobre el uso de créditos
+* Resiliencia de la red
+
+Ejemplo de respuesta de error:
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Error: Se superó el límite de velocidad. Reintentando en 2 segundos..."
+    }
+  ],
+  "isError": true
+}
+```
+
+
+<div id="development">
+  ## Desarrollo
+</div>
+
+```bash
+# Instalar dependencias
+npm install
+
+# Compilar
+npm run build
+
+# Ejecutar pruebas
+npm test
+```
+
+
+<div id="contributing">
+  ### Contribuir
+</div>
+
+1. Haz un fork del repositorio
+2. Crea una rama para tu función
+3. Ejecuta las pruebas: `npm test`
+4. Envía un pull request
+
+<div id="thanks-to-contributors">
+  ### Gracias a los colaboradores
+</div>
+
+Gracias a [@vrknetha](https://github.com/vrknetha) y [@cawstudios](https://caw.tech) por la implementación inicial.
+
+Gracias a MCP.so y Klavis AI por el alojamiento, y a [@gstarwd](https://github.com/gstarwd), [@xiangkaiz](https://github.com/xiangkaiz) y [@zihaolin96](https://github.com/zihaolin96) por integrar nuestro servidor.
+
+<div id="license">
+  ## Licencia
+</div>
+
+Licencia MIT: consulta el archivo LICENSE para más detalles

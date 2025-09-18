@@ -1,0 +1,339 @@
+---
+title: "Raspado"
+description: "Convierte cualquier URL en datos limpios"
+og:title: "Raspado | Firecrawl"
+og:description: "Convierte cualquier URL en datos limpios"
+---
+
+import InstallationPython from "/snippets/es/v2/installation/python.mdx";
+import InstallationNode from "/snippets/es/v2/installation/js.mdx";
+import ScrapePython from "/snippets/es/v2/scrape/base/python.mdx";
+import ScrapeNode from "/snippets/es/v2/scrape/base/js.mdx";
+import ScrapeCURL from "/snippets/es/v2/scrape/base/curl.mdx";
+import ScrapeResponse from "/snippets/es/v2/scrape/base/output.mdx";
+import ExtractCURL from "/snippets/es/v2/scrape/json/base/curl.mdx";
+import ExtractPython from "/snippets/es/v2/scrape/json/base/python.mdx";
+import ExtractNode from "/snippets/es/v2/scrape/json/base/js.mdx";
+import ExtractOutput from "/snippets/es/v2/scrape/json/base/output.mdx";
+import ExtractNoSchemaCURL from "/snippets/es/v2/scrape/json/no-schema/curl.mdx";
+import ExtractNoSchemaPython from "/snippets/es/v2/scrape/json/no-schema/python.mdx";
+import ExtractNoSchemaNode from "/snippets/es/v2/scrape/json/no-schema/js.mdx";
+import ExtractNoSchemaOutput from "/snippets/es/v2/scrape/json/no-schema/output.mdx";
+import ScrapeActionsPython from "/snippets/es/v2/scrape/actions/python.mdx";
+import ScrapeActionsNode from "/snippets/es/v2/scrape/actions/js.mdx";
+import ScrapeActionsCURL from "/snippets/es/v2/scrape/actions/curl.mdx";
+import ScrapeActionsOutput from "/snippets/es/v2/scrape/actions/output.mdx";
+import BatchScrapePython from "/snippets/es/v2/batch-scrape/short/python.mdx";
+import BatchScrapeNode from "/snippets/es/v2/batch-scrape/short/js.mdx";
+import BatchScrapeCURL from "/snippets/es/v2/batch-scrape/short/curl.mdx";
+import BatchScrapeOutput from "/snippets/es/v2/batch-scrape/base/output.mdx";
+import BatchScrapeAsyncOutput from "/snippets/es/v2/batch-scrape/base/async-output.mdx";
+import ScrapeLocationPython from "/snippets/es/v2/scrape/location/python.mdx";
+import ScrapeLocationNode from "/snippets/es/v2/scrape/location/js.mdx";
+import ScrapeLocationCURL from "/snippets/es/v2/scrape/location/curl.mdx";
+
+Firecrawl convierte páginas web en Markdown, ideal para aplicaciones con LLM.
+
+* Gestiona las complejidades: proxies, caché, límites de velocidad, contenido bloqueado por JS
+* Maneja contenido dinámico: sitios dinámicos, sitios renderizados con JS, PDF, imágenes
+* Genera Markdown limpio, datos estructurados, capturas de pantalla o HTML.
+
+Para más detalles, consulta la [referencia del endpoint de Scrape](https://docs.firecrawl.dev/api-reference/endpoint/scrape).
+
+<div id="scraping-a-url-with-firecrawl">
+  ## Raspado de una URL con Firecrawl
+</div>
+
+<div id="scrape-endpoint">
+  ### endpoint /scrape
+</div>
+
+Se utiliza para extraer el contenido de una URL.
+
+<div id="installation">
+  ### Instalación
+</div>
+
+<CodeGroup>
+  <InstallationPython />
+
+  <InstallationNode />
+</CodeGroup>
+
+<div id="usage">
+  ### Uso
+</div>
+
+<CodeGroup>
+  <ScrapePython />
+
+  <ScrapeNode />
+
+  <ScrapeCURL />
+</CodeGroup>
+
+Para más información sobre los parámetros, consulta la [Referencia de la API](https://docs.firecrawl.dev/api-reference/endpoint/scrape).
+
+<div id="response">
+  ### Respuesta
+</div>
+
+Los SDK devolverán directamente el objeto de datos. cURL devolverá el payload exactamente como se muestra a continuación.
+
+<ScrapeResponse />
+
+<div id="scrape-formats">
+  ## Formatos de raspado
+</div>
+
+Ahora puedes elegir en qué formatos quieres el resultado. Puedes especificar varios formatos de salida. Los formatos compatibles son:
+
+* Markdown (`markdown`)
+* Resumen (`summary`)
+* HTML (`html`)
+* HTML sin procesar (`rawHtml`) (sin modificaciones)
+* Captura de pantalla (`screenshot`, con opciones como `fullPage`, `quality`, `viewport`)
+* Enlaces (`links`)
+* JSON (`json`) - salida estructurada
+
+Las claves de salida coincidirán con el formato que elijas.
+
+<div id="extract-structured-data">
+  ## Extraer datos estructurados
+</div>
+
+<div id="scrape-with-json-endpoint">
+  ### Endpoint /scrape (con JSON)
+</div>
+
+Se usa para extraer datos estructurados de páginas raspadas.
+
+<CodeGroup>
+  <ExtractPython />
+
+  <ExtractNode />
+
+  <ExtractCURL />
+</CodeGroup>
+
+Salida:
+
+<ExtractOutput />
+
+<div id="extracting-without-schema">
+  ### Extracción sin esquema
+</div>
+
+Ahora puedes extraer sin un esquema simplemente pasando un `prompt` al endpoint. El LLM decide la estructura de los datos.
+
+<CodeGroup>
+  <ExtractNoSchemaPython />
+
+  <ExtractNoSchemaNode />
+
+  <ExtractNoSchemaCURL />
+</CodeGroup>
+
+Resultado:
+
+<ExtractNoSchemaOutput />
+
+<div id="json-format-options">
+  ### Opciones de formato JSON
+</div>
+
+Al usar el formato `json`, pasa un objeto dentro de `formats` con los siguientes parámetros:
+
+* `schema`: Esquema JSON para la salida estructurada.
+* `prompt`: Indicador opcional para orientar la extracción cuando haya un esquema presente o cuando prefieras una guía ligera.
+
+<div id="interacting-with-the-page-with-actions">
+  ## Interactuar con la página con acciones
+</div>
+
+Firecrawl te permite realizar varias acciones en una página web antes de extraer su contenido. Esto es especialmente útil para interactuar con contenido dinámico, navegar entre páginas o acceder a contenido que requiere interacción del usuario.
+
+Aquí tienes un ejemplo de cómo usar acciones para ir a google.com, buscar Firecrawl, hacer clic en el primer resultado y tomar una captura de pantalla.
+
+Es importante usar casi siempre la acción `wait` antes y/o después de ejecutar otras acciones para dar tiempo suficiente a que la página cargue.
+
+<div id="example">
+  ### Ejemplo
+</div>
+
+<CodeGroup>
+  <ScrapeActionsPython />
+
+  <ScrapeActionsNode />
+
+  <ScrapeActionsCURL />
+</CodeGroup>
+
+<div id="output">
+  ### Salida
+</div>
+
+<CodeGroup>
+  <ScrapeActionsOutput />
+</CodeGroup>
+
+Para más detalles sobre los parámetros de acciones, consulta la [Referencia de la API](https://docs.firecrawl.dev/api-reference/endpoint/scrape).
+
+<div id="location-and-language">
+  ## Ubicación e idioma
+</div>
+
+Especifica el país y los idiomas preferidos para obtener contenido relevante según tu ubicación objetivo y tus preferencias de idioma.
+
+<div id="how-it-works">
+  ### Cómo funciona
+</div>
+
+Cuando especificas la configuración de ubicación, Firecrawl utilizará un proxy adecuado si está disponible y emulará la configuración de idioma y zona horaria correspondiente. De forma predeterminada, la ubicación se establece en “US” si no se especifica.
+
+<div id="usage">
+  ### Uso
+</div>
+
+Para usar la configuración de ubicación e idioma, incluye el objeto `location` en el cuerpo de la solicitud con las siguientes propiedades:
+
+* `country`: código de país ISO 3166-1 alfa-2 (p. ej., &#39;US&#39;, &#39;AU&#39;, &#39;DE&#39;, &#39;JP&#39;). Predeterminado: &#39;US&#39;.
+* `languages`: una lista de idiomas y configuraciones regionales preferidos para la solicitud en orden de prioridad. De forma predeterminada, se usa el idioma de la ubicación especificada.
+
+<CodeGroup>
+  <ScrapeLocationPython />
+
+  <ScrapeLocationNode />
+
+  <ScrapeLocationCURL />
+</CodeGroup>
+
+Para más detalles sobre las ubicaciones compatibles, consulta la [documentación de Proxies](/es/features/proxies).
+
+<div id="caching-and-maxage">
+  ## Caché y maxAge
+</div>
+
+Para acelerar las solicitudes, Firecrawl devuelve resultados desde la caché de forma predeterminada cuando hay una copia reciente disponible.
+
+* **Ventana de frescura predeterminada**: `maxAge = 172800000` ms (2 días). Si una página en caché es más reciente que ese valor, se devuelve al instante; de lo contrario, la página se raspa y luego se guarda en caché.
+* **Rendimiento**: Esto puede acelerar el raspado hasta 5x cuando los datos no necesitan estar ultrafrescos.
+* **Obtener siempre contenido fresco**: Establece `maxAge` en `0`.
+* **Evitar almacenamiento**: Establece `storeInCache` en `false` si no quieres que Firecrawl almacene en caché/guarde los resultados de esta solicitud.
+
+Ejemplo (forzar contenido fresco):
+
+<CodeGroup>
+  ```python Python
+  from firecrawl import Firecrawl
+  firecrawl = Firecrawl(api_key='fc-YOUR_API_KEY')
+
+  doc = firecrawl.scrape(url='https://example.com', maxAge=0, formats=['markdown'])
+  print(doc)
+  ```
+
+  ```js Node
+  import Firecrawl from '@mendable/firecrawl-js';
+
+  const firecrawl = new Firecrawl({ apiKey: "fc-YOUR-API-KEY" });
+
+  const doc = await firecrawl.scrape('https://example.com', { maxAge: 0, formats: ['markdown'] });
+  console.log(doc);
+  ```
+
+  ```bash cURL
+  curl -s -X POST "https://api.firecrawl.dev/v2/scrape" \
+    -H "Authorization: Bearer $FIRECRAWL_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "url": "https://example.com",
+      "maxAge": 0,
+      "formats": ["markdown"]
+    }'
+  ```
+</CodeGroup>
+
+Ejemplo (usar una ventana de caché de 10 minutos):
+
+<CodeGroup>
+  ```python Python
+  from firecrawl import Firecrawl
+  firecrawl = Firecrawl(api_key='fc-YOUR_API_KEY')
+
+  doc = firecrawl.scrape(url='https://example.com', maxAge=600000, formats=['markdown', 'html'])
+  print(doc)
+  ```
+
+  ```js Node
+
+  const firecrawl = new Firecrawl({ apiKey: "fc-YOUR-API-KEY" });
+
+  const doc = await firecrawl.scrape('https://example.com', { maxAge: 600000, formats: ['markdown', 'html'] });
+  console.log(doc);
+  ```
+
+  ```bash cURL
+  curl -s -X POST "https://api.firecrawl.dev/v2/scrape" \
+    -H "Authorization: Bearer $FIRECRAWL_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "url": "https://example.com",
+      "maxAge": 600000,
+      "formats": ["markdown", "html"]
+    }'
+  ```
+</CodeGroup>
+
+<div id="batch-scraping-multiple-urls">
+  ## Raspado por lotes de múltiples URL
+</div>
+
+Ahora puedes raspar múltiples URL en lote al mismo tiempo. Recibe las URL iniciales y parámetros opcionales como argumentos. El argumento params te permite especificar opciones adicionales para el trabajo de raspado por lotes, como los formatos de salida.
+
+<div id="how-it-works">
+  ### Cómo funciona
+</div>
+
+Es muy similar a cómo funciona el endpoint `/crawl`. Envía un trabajo de Raspado por lotes y devuelve un ID de trabajo para comprobar el estado del Raspado por lotes.
+
+El SDK ofrece 2 métodos: sincrónico y asincrónico. El método sincrónico devuelve los resultados del trabajo de Raspado por lotes, mientras que el método asincrónico devuelve un ID de trabajo que puedes usar para comprobar el estado del Raspado por lotes.
+
+<div id="usage">
+  ### Uso
+</div>
+
+<CodeGroup>
+  <BatchScrapePython />
+
+  <BatchScrapeNode />
+
+  <BatchScrapeCURL />
+</CodeGroup>
+
+<div id="response">
+  ### Respuesta
+</div>
+
+Si usas los métodos síncronos de los SDK, se devolverán los resultados del trabajo de Raspado por lotes. De lo contrario, se devolverá un ID de trabajo que puedes usar para consultar el estado del Raspado por lotes.
+
+<div id="synchronous">
+  #### Sincrónica
+</div>
+
+<BatchScrapeOutput />
+
+<div id="asynchronous">
+  #### Asíncrono
+</div>
+
+Luego puedes usar el ID del job para consultar el estado del Raspado por lotes llamando al endpoint `/batch/scrape/{id}`. Este endpoint está pensado para usarse mientras el job aún se está ejecutando o justo después de que haya finalizado, **ya que los jobs de Raspado por lotes expiran después de 24 horas**.
+
+<BatchScrapeAsyncOutput />
+
+<div id="stealth-mode">
+  ## Modo sigiloso
+</div>
+
+Para sitios web con protección anti‑bots avanzada, Firecrawl ofrece un modo de proxy sigiloso que mejora las tasas de éxito al raspar sitios difíciles.
+
+Más información sobre el [Modo sigiloso](/es/features/stealth-mode).

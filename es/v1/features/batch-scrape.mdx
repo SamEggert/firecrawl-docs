@@ -1,0 +1,132 @@
+---
+title: "Raspado por lotes"
+description: "Raspar varias URL por lotes"
+og:title: "Raspado por lotes | Firecrawl"
+og:description: "Raspar varias URL por lotes"
+---
+
+import BatchScrapePython from "/snippets/es/v1/batch-scrape/base/python.mdx";
+import BatchScrapeNode from "/snippets/es/v1/batch-scrape/base/js.mdx";
+import BatchScrapeCURL from "/snippets/es/v1/batch-scrape/base/curl.mdx";
+import BatchScrapeOutput from "/snippets/es/v1/batch-scrape/base/output.mdx";
+import BatchScrapeAsyncOutput from "/snippets/es/v1/batch-scrape/base/async-output.mdx";
+import BatchScrapeExtractPython from "/snippets/es/v1/batch-scrape/extract/python.mdx";
+import BatchScrapeExtractNode from "/snippets/es/v1/batch-scrape/extract/js.mdx";
+import BatchScrapeExtractCURL from "/snippets/es/v1/batch-scrape/extract/curl.mdx";
+import BatchScrapeExtractOutput from "/snippets/es/v1/batch-scrape/extract/output.mdx";
+import BatchScrapeExtractAsyncOutput from "/snippets/es/v1/batch-scrape/extract/async-output.mdx";
+import BatchScrapeWebhookCURL from "/snippets/es/v1/batch-scrape-webhook/base/curl.mdx";
+
+<div id="batch-scraping-multiple-urls">
+  ## Raspado por lotes de múltiples URL
+</div>
+
+Ahora puedes raspar por lotes múltiples URL al mismo tiempo. Recibe las URL iniciales y parámetros opcionales como argumentos. El argumento params te permite especificar opciones adicionales para el trabajo de raspado por lotes, como los formatos de salida.
+
+<div id="how-it-works">
+  ### Cómo funciona
+</div>
+
+Funciona de forma muy similar al endpoint `/crawl`. Envía un trabajo de Raspado por lotes y devuelve un ID de trabajo para consultar el estado del lote.
+
+El SDK ofrece 2 métodos: sincrónico y asincrónico. El método sincrónico devuelve los resultados del trabajo de Raspado por lotes, mientras que el asincrónico devuelve un ID de trabajo que puedes usar para consultar el estado del lote.
+
+<div id="usage">
+  ### Uso
+</div>
+
+<CodeGroup>
+  <BatchScrapePython />
+
+  <BatchScrapeNode />
+
+  <BatchScrapeCURL />
+</CodeGroup>
+
+<div id="response">
+  ### Respuesta
+</div>
+
+Si usas los métodos síncronos de los SDK, se devolverán los resultados del trabajo de Raspado por lotes. De lo contrario, se devolverá un ID de trabajo que puedes usar para consultar el estado del Raspado por lotes.
+
+<div id="synchronous">
+  #### Sincrónico
+</div>
+
+<BatchScrapeOutput />
+
+<div id="asynchronous">
+  #### Asíncrono
+</div>
+
+Luego puedes usar el ID del trabajo para comprobar el estado del Raspado por lotes llamando al endpoint `/batch/scrape/{id}`. Este endpoint está pensado para usarse mientras el trabajo aún se está ejecutando o justo después de que haya finalizado, **ya que los trabajos de Raspado por lotes expiran después de 24 horas**.
+
+<BatchScrapeAsyncOutput />
+
+<div id="batch-scrape-with-extraction">
+  ## Raspado por lotes con extracción
+</div>
+
+También puedes usar el endpoint de Raspado por lotes para extraer datos estructurados de las páginas. Es útil si quieres obtener los mismos datos estructurados de una lista de URL.
+
+<CodeGroup>
+  <BatchScrapeExtractPython />
+
+  <BatchScrapeExtractNode />
+
+  <BatchScrapeExtractCURL />
+</CodeGroup>
+
+<div id="response">
+  ### Respuesta
+</div>
+
+<div id="synchronous">
+  #### Sincrónico
+</div>
+
+<BatchScrapeExtractOutput />
+
+<div id="asynchronous">
+  #### Asíncrono
+</div>
+
+<BatchScrapeExtractAsyncOutput />
+
+<div id="batch-scrape-with-webhooks">
+  ## Raspado por lotes con webhooks
+</div>
+
+Puedes configurar webhooks para recibir notificaciones en tiempo real a medida que se raspa cada URL de tu lote. Esto te permite procesar los resultados de inmediato en lugar de esperar a que se complete todo el lote.
+
+<BatchScrapeWebhookCURL />
+
+Para obtener documentación completa sobre webhooks, incluidos los tipos de eventos, la estructura del payload y ejemplos de implementación, consulta la [documentación de webhooks](/es/features/webhooks).
+
+<div id="quick-reference">
+  ### Referencia rápida
+</div>
+
+**Tipos de eventos:**
+
+* `batch_scrape.started` - Cuando comienza el Raspado por lotes
+* `batch_scrape.page` - Por cada URL raspada correctamente
+* `batch_scrape.completed` - Cuando se han procesado todas las URL
+* `batch_scrape.failed` - Si el Raspado por lotes encuentra un error
+
+**Carga útil básica:**
+
+```json
+{
+  "success": true,
+  "type": "batch_scrape.page",
+  "id": "batch-job-id",
+  "data": [...], // Datos de la página para eventos "page"
+  "metadata": {}, // Metadatos personalizados
+  "error": null
+}
+```
+
+<Note>
+  Para obtener detalles sobre la configuración de webhooks, las prácticas recomendadas de seguridad y la solución de problemas, visita la [documentación de Webhooks](/es/features/webhooks).
+</Note>

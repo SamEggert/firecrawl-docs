@@ -1,0 +1,14 @@
+```js Node
+// npm i @mendable/firecrawl-js
+
+import { FirecrawlApp } from '@mendable/firecrawl-js';
+
+const app = new FirecrawlApp({ apiKey: 'TU_API_KEY' });
+
+// Usar el proxy stealth para sitios con soluciones avanzadas antibots
+const content = await app.scrapeUrl('https://example.com', {
+  proxy: 'stealth'
+});
+
+console.log(content.markdown);
+```

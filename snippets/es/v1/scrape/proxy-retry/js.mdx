@@ -1,0 +1,42 @@
+```js Node
+// npm install @mendable/firecrawl-js
+
+import { FirecrawlApp } from '@mendable/firecrawl-js';
+
+const app = new FirecrawlApp({ apiKey: 'YOUR_API_KEY' });
+
+// Función para hacer scraping con lógica de reintento
+async function scrapeWithRetry(url) {
+  try {
+    // Primero intenta con el proxy predeterminado
+    const content = await app.scrapeUrl(url);
+    
+    // Verifica si recibimos un código de estado de error
+    const statusCode = content?.metadata?.statusCode;
+    if ([401, 403, 500].includes(statusCode)) {
+      console.log(`Se recibió el código de estado ${statusCode}, reintentando con proxy stealth`);
+      // Reintentar con proxy stealth
+      return await app.scrapeUrl(url, {
+        proxy: 'stealth'
+      });
+    }
+    
+    return content;
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    // Reintentar con proxy stealth ante una excepción
+    try {
+      return await app.scrapeUrl(url, {
+        proxy: 'stealth'
+      });
+    } catch (retryError) {
+      console.error(`El proxy stealth también falló: ${retryError.message}`);
+      throw retryError;
+    }
+  }
+}
+
+// Uso
+const content = await scrapeWithRetry('https://example.com');
+console.log(content.markdown);
+```

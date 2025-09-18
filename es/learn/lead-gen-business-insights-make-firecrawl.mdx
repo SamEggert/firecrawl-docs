@@ -1,0 +1,210 @@
+---
+title: "Uso de extracción con LLM para información de clientes"
+description: "Uso de la extracción con LLM para insights y generación de leads con Make y Firecrawl."
+og:title: "Uso de extracción con LLM para información de clientes | Firecrawl"
+og:description: "Uso de la extracción con LLM para insights y generación de leads con Make y Firecrawl."
+---
+
+> Nota: este ejemplo usa la [versión v0 de la API de Firecrawl](/es/v0/introduction). Puedes instalar la versión 0.0.20 del SDK de Python o la 0.0.36 del SDK de Node.
+
+<div id="introduction">
+  ### Introducción
+</div>
+
+Entender a nuestros clientes —no solo quiénes son, sino qué hacen— es clave para adaptar nuestros productos y servicios de forma efectiva. Al operar un modelo self-serve, llegan muchísimos clientes con los que tenemos poco o ningún contexto. Tradicionalmente, el proceso de entender proactivamente quiénes son estas personas ha requerido mucho tiempo, implicando la recopilación y el análisis manual de datos para obtener información accionable.
+
+Sin embargo, con el poder de los LLM y su capacidad para la extracción avanzada de datos, hemos automatizado este proceso. Al usar LLM para extraer y analizar datos de clientes, hemos reducido significativamente nuestra carga de trabajo, lo que nos permite comprender y atender a nuestra base de clientes de manera más efectiva que nunca.
+
+Si tienes conocimientos técnicos limitados, puedes crear una automatización que obtenga información dirigida sobre tus clientes con fines de dirección de producto y generación de leads. Aquí te explicamos cómo hacerlo con [Make](https://make.com/) y [Firecrawl](https://www.firecrawl.dev/).
+
+***
+
+<div id="overview-of-the-tools">
+  ### Descripción general de las herramientas
+</div>
+
+**Firecrawl**
+
+Firecrawl es una plataforma para scraping, búsqueda y extracción. Te permite obtener datos de la web y convertirlos en markdown legible por LLM o en datos estructurados.
+
+Cuando queremos obtener información sobre nuestros clientes, podemos usar la funcionalidad de extracción con LLM de Firecrawl para especificar la información exacta que queremos de sus sitios web.
+
+**Make.com (anteriormente Integromat)**
+
+Make es una plataforma de automatización que permite a los usuarios crear flujos de trabajo personalizados para conectar diversas apps y servicios sin necesidad de conocimientos técnicos avanzados. Utiliza una interfaz visual en la que los usuarios pueden arrastrar y soltar elementos para diseñar sus automatizaciones.
+
+Podemos usar Make para conectar una hoja de cálculo con datos de usuarios a Firecrawl, lo que nos permite realizar extracciones con solo un poco de JSON.
+
+<div id="preparing-our-data">
+  ### Configuración del escenario
+</div>
+
+* Guía paso a paso para configurar el proceso de extracción de datos.
+* **Conectar Google Sheets a Make.com**
+  * Cómo se recopilan y almacenan inicialmente los datos de los usuarios.
+* **Configurar la solicitud HTTP en Make.com**
+  * Descripción de la configuración de solicitudes a la API de Firecrawl.
+  * Propósito de estas solicitudes (p. ej., extraer información de empresas).
+
+### Preparando nuestros datos
+
+Antes de empezar, queremos asegurarnos de preparar nuestros datos para Firecrawl. En este caso, creé una hoja de cálculo sencilla con usuarios importados de nuestra base de datos. Queremos tomar los dominios de correo electrónico de nuestros usuarios y convertirlos en enlaces usando el formato https://:
+
+![](https://i.imgur.com/gssynZa.png)
+
+También queremos añadir algunos atributos que nos gustaría conocer sobre estas empresas. En mi caso, quiero entender un poco sobre la empresa, su industria y sus clientes. Los he definido en columnas como:
+company&#95;description
+company&#95;type
+who&#95;they&#95;serve
+
+Ahora que tenemos nuestros datos preparados, ¡podemos empezar a configurar nuestra automatización en Make!
+
+## Configurar nuestra automatización
+
+Para poner en marcha nuestra automatización, solo necesitamos seguir un proceso de tres pasos en Make. Aquí, seleccionaremos tres aplicaciones en nuestro escenario:
+
+Google Sheets - Obtener valores de un rango
+HTTP - Realizar una solicitud con autenticación por clave de API
+Google Sheets - Actualizar una fila
+
+También conviene agregar la herramienta para ignorar el control de flujo por si surge algún error. Así la automatización seguirá ejecutándose.
+
+![](https://i.imgur.com/MdCWv30.png)
+
+Esta automatización nos permitirá extraer un conjunto de enlaces de nuestra hoja de cálculo, enviarlos a Firecrawl para extraer los datos y luego volver a poblar nuestra hoja de cálculo con la información deseada.
+
+Comencemos configurando nuestra primera app. Nuestro objetivo es exportar todas las URL para poder enviarlas a Firecrawl y extraer los datos. Esta es la configuración para obtener esas URL:
+
+![](https://i.imgur.com/WHa91kY.png)
+
+**Importante* - queremos asegurarnos de empezar a extraer datos desde la segunda fila. Si incluyes el encabezado, tarde o temprano encontrarás un error.
+
+***
+
+¡Genial! Ahora que tenemos eso configurado, vamos a preparar nuestra solicitud HTTP. Para hacerlo, iremos a https://firecrawl.dev para registrarnos y obtener nuestra clave de API (¡puedes empezar gratis!). Una vez que te registres, puedes ir a https://firecrawl.dev/account para ver tu clave de API.
+
+Usaremos el endpoint Scrape de Firecrawl. Este endpoint nos permitirá obtener información de una sola URL, convertirla a markdown limpio y usarla para extraer los datos que necesitamos. Completaré todas las condiciones necesarias en nuestra solicitud Make HTTP usando la referencia de la API en su documentación.
+
+Ahora, en Make, configuro la llamada a la API siguiendo la documentación de Firecrawl. Usaremos POST como método HTTP y añadiremos dos encabezados.
+
+```
+Encabezado 1:
+Nombre: Authorization
+Valor: Bearer your-API-key
+
+Encabezado 2:
+Nombre: Content-Type
+Valor: application/json
+```
+
+![](https://i.imgur.com/LJ8g142.png)
+También queremos definir nuestros tipos de cuerpo y de contenido. Aquí haremos lo siguiente:
+
+```
+Tipo de cuerpo: Raw
+Tipo de contenido: JSON (application/json)
+```
+
+También haremos clic en «sí» para parsear nuestra respuesta. Esto la convertirá automáticamente a JSON.
+
+El contenido de la solicitud es el núcleo de lo que queremos lograr. A continuación, el contenido de la solicitud que usaremos para este caso de uso:
+
+```
+{
+  "url": "1. url(B)",
+
+"pageOptions": {
+    "onlyMainContent": true
+  },
+  "extractorOptions": {
+    "mode": "llm-extraction",
+    "extractionPrompt": "Extrae la descripción de la empresa (explica en una sola oración qué hace la empresa), el sector de la empresa (software, servicios, IA, etc.; debería ser simplemente una etiqueta con un par de palabras clave) y a quién atienden (quiénes son sus clientes). Si no hay información clara para responder, escribe 'no info'.",
+    "extractionSchema": {
+      "type": "object",
+      "properties": {
+        "company_description": {
+          "type": "string"
+        },
+        "company_industry": {
+          "type": "string"
+        },
+        "who_they_serve": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "company_description",
+        "company_industry",
+        "who_they_serve"
+      ]
+    }
+  }
+}
+```
+
+![](https://i.imgur.com/DrMc1g2.png)
+
+**Nota:* el campo verde en la captura de pantalla es un elemento dinámico que puedes seleccionar en la interfaz de Make. En lugar de `url (B)`, el bloque puede ser la primera URL de tus datos.
+
+![](https://i.imgur.com/D4HCBNe.png)
+
+¡Fantástico! Ya hemos configurado nuestra solicitud HTTP. Probémosla para asegurarnos de que todo funciona como debería. Haz clic en &quot;Run once&quot; en Make y deberíamos recibir datos de vuelta.
+
+![](https://i.imgur.com/QuQZs0U.png)
+
+Al ejecutar, revisemos nuestra primera operación. En la salida, deberíamos obtener un `status code: 200`, lo que significa que nuestra solicitud a la API se realizó correctamente. En la salida, haz clic en data para asegurarte de que tenemos los datos que necesitábamos.
+
+![](https://i.imgur.com/pm614VA.png)
+
+¡Nuestro resultado parece correcto! En llm&#95;extraction vemos los tres atributos de datos que queríamos del sitio web.
+
+**Nota*: si recibes un error `500` en tu primera operación y respuestas `200` en las siguientes, puede deberse a que la operación intenta ejecutarse sobre la primera fila de tus datos (la fila de encabezado). ¡Esto provocará problemas al volver a importar los datos en las hojas! Asegúrate de empezar desde la segunda fila, como se mencionó antes.
+
+Ahora que sabemos que la solicitud HTTP funciona correctamente, solo queda tomar el JSON generado por Firecrawl y volver a colocarlo en nuestra hoja de cálculo.
+
+***
+
+Ahora necesitamos tomar los datos extraídos y devolverlos a nuestra hoja de cálculo. Para ello, tomaremos el JSON generado por nuestra solicitud HTTP y exportaremos el texto a las tablas correspondientes.
+
+Empecemos conectando la misma hoja de Google y especificando el criterio de Número de fila. Aquí simplemente usaremos la interfaz de Make para elegir ‘row number’.
+
+![](https://i.imgur.com/BYpPabk.png)
+
+Solo queda especificar qué datos extraídos por el LLM van en cada columna. Aquí, podemos usar la interfaz de Make para configurarlo fácilmente.
+
+![](https://i.imgur.com/219tft2.png)
+
+Listo, ¡es momento de probar nuestra automatización!
+
+***
+
+Hagamos clic en `run once` en la interfaz de Make y asegurémonos de que todo se ejecute sin problemas. La automatización debería comenzar a iterar enlace por enlace y a completar nuestra hoja de cálculo en tiempo real.
+
+![](https://i.imgur.com/vU1CJlt.png)
+
+¡Lo logramos! Con Make y Firecrawl, pudimos extraer información específica sobre nuestros clientes sin tener que ir manualmente a cada uno de sus sitios web.
+
+Al revisar los datos, empezamos a comprender mejor a nuestros clientes. Sin embargo, no estamos limitados a estas características específicas. Si queremos, podemos personalizar nuestro JSON y el prompt de extracción para averiguar otra información sobre estas empresas.
+
+<div id="going-a-step-further">
+  ### Casos de uso
+</div>
+
+La extracción con LLM nos permite obtener rápidamente información específica de la web relevante para nuestro negocio. Podemos usar estas automatizaciones para realizar una variedad de tareas.
+
+**Producto:**
+Especialmente para empresas de autoservicio, podemos entender las tendencias en los sectores que usan nuestro producto. ¿Cuáles son las 2 o 3 industrias principales que utilizan nuestra tecnología y para qué la usan? Esto nos permitirá tomar mejores decisiones de producto al priorizar a los clientes adecuados en los que enfocarnos.
+
+**Desarrollo de negocio:**
+Al entender quiénes son nuestros usuarios, podemos buscar empresas similares que también podrían beneficiarse de nuestro producto. Con una automatización similar, podemos extraer indicadores positivos de prospectos que se beneficiarían de nuestro producto.
+
+También podemos usar estos datos para generar mejores correos de acercamiento, más específicos para cada prospecto.
+
+**Investigación de mercado:**
+Las firmas de investigación de mercado dedican muchísimo tiempo a la investigación secundaria, especialmente en sectores de nicho. Podemos agilizar la recopilación de datos automatizando la extracción y organización de información desde fuentes diversas. Esta automatización ayuda a aumentar la eficiencia y escala con las necesidades de datos en crecimiento, lo que la convierte en una herramienta valiosa para la toma de decisiones estratégicas en industrias de rápida evolución.
+
+### Dando un paso más
+
+Este fue solo un ejemplo sencillo de cómo podemos usar LLMs para extraer datos relevantes de sitios web usando una hoja de cálculo estática. Siempre puedes hacerlo más avanzado conectándolo dinámicamente a tus registros de registro. Además, podrías conectarlo a otras herramientas para acelerar aún más tu productividad. Por ejemplo, usar el contenido extraído para generar textos más personalizados para la prospección.
+
+Si te resultó útil, ¡no dudes en hacérmelo saber! Me encantaría conocer tus comentarios o saber en qué estás trabajando. Puedes contactarme en eric@mendable.ai. ¡Buena suerte y que disfrutes construyendo!

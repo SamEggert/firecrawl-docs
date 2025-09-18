@@ -1,0 +1,44 @@
+```js Node
+import FirecrawlApp, { ScrapeResponse } from '@mendable/firecrawl-js';
+
+const app = new FirecrawlApp({apiKey: "fc-YOUR_API_KEY"});
+
+// Define el esquema para extraer el contenido
+const schema = {
+  type: "object",
+  properties: {
+    title: { type: "string" },
+    description: { type: "string" }
+  },
+  required: ["title", "description"]
+};
+
+// Raspa múltiples sitios web (sincrónico):
+const batchScrapeResult = await app.batchScrapeUrls(['https://docs.firecrawl.dev', 'https://docs.firecrawl.dev/sdks/overview'], { 
+  formats: ['json'],
+  jsonOptions: {
+    prompt: "Extrae el título y la descripción de la página.",
+    schema: schema
+  }
+});
+
+if (!batchScrapeResult.success) {
+  throw new Error(`Error al raspar: ${batchScrapeResult.error}`)
+}
+// Muestra todos los resultados del raspado por lotes:
+console.log(batchScrapeResult)
+
+// O también puedes usar el método asíncrono:
+const batchScrapeJob = await app.asyncBulkScrapeUrls(['https://docs.firecrawl.dev', 'https://docs.firecrawl.dev/sdks/overview'], { 
+  formats: ['json'],
+  jsonOptions: {
+    prompt: "Extrae el título y la descripción de la página.",
+    schema: schema
+  }
+});
+console.log(batchScrapeJob)
+
+// (async) Luego puedes usar el ID del job para comprobar el estado del raspado por lotes:
+const batchScrapeStatus = await app.checkBatchScrapeStatus(batchScrapeJob.id);
+console.log(batchScrapeStatus)
+```

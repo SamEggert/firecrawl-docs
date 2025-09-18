@@ -1,0 +1,199 @@
+---
+title: 'Python'
+description: 'El SDK de Firecrawl para Python es un wrapper de la API de Firecrawl que te ayuda a convertir sitios web en Markdown fácilmente.'
+icon: 'python'
+og:title: "SDK de Python | Firecrawl"
+og:description: "El SDK de Firecrawl para Python es un wrapper de la API de Firecrawl que te ayuda a convertir sitios web en Markdown fácilmente."
+---
+
+import InstallationPython from '/snippets/es/v2/installation/python.mdx'
+import ScrapePythonShort from '/snippets/es/v2/scrape/short/python.mdx'
+import CrawlPythonShort from '/snippets/es/v2/crawl/short/python.mdx'
+import CheckCrawlStatusPythonShort from '/snippets/es/v2/crawl-status/short/python.mdx'
+import StartCrawlPythonShort from '/snippets/es/v2/start-crawl/short/python.mdx'
+import CancelCrawlPythonShort from '/snippets/es/v2/crawl-delete/short/python.mdx'
+import MapPythonShort from '/snippets/es/v2/map/short/python.mdx'
+import ExtractPythonShort from '/snippets/v2/extract/short/python.mdx'
+import ScrapeAndCrawlExamplePython from '/snippets/es/v2/scrape-and-crawl/python.mdx'
+import CrawlWebSocketPythonBase from '/snippets/es/v2/crawl-websocket/base/python.mdx'
+import AIOPython from '/snippets/es/v2/async/base/python.mdx'
+
+<div id="installation">
+  ## Instalación
+</div>
+
+Para instalar el SDK de Python de Firecrawl, puedes usar pip:
+
+<InstallationPython />
+
+<div id="usage">
+  ## Uso
+</div>
+
+1. Obtén una clave de API en [firecrawl.dev](https://firecrawl.dev)
+2. Define la clave de API como una variable de entorno llamada `FIRECRAWL_API_KEY` o pásala como parámetro a la clase `Firecrawl`.
+
+Aquí tienes un ejemplo de cómo usar el SDK:
+
+<ScrapeAndCrawlExamplePython />
+
+<div id="scraping-a-url">
+  ### Raspado de una URL
+</div>
+
+Para raspar una sola URL, usa el método `scrape`. Recibe la URL como parámetro y devuelve el documento extraído.
+
+<ScrapePythonShort />
+
+<div id="crawl-a-website">
+  ### Rastrear un sitio web
+</div>
+
+Para rastrear un sitio web, utiliza el método `crawl`. Recibe la URL inicial y, opcionalmente, un objeto de opciones como argumentos. Las opciones te permiten definir configuraciones adicionales para la tarea de rastreo, como el número máximo de páginas a rastrear, los dominios permitidos y el formato de salida. Consulta [Paginación](#pagination) para la paginación automática/manual y los límites.
+
+<CrawlPythonShort />
+
+<div id="start-a-crawl">
+  ### Iniciar un rastreo
+</div>
+
+<Tip>¿Prefieres no bloquear? Consulta la sección de [clase Async](#async-class) a continuación.</Tip>
+
+Inicia un trabajo sin esperar usando `start_crawl`. Devuelve un `ID` de trabajo que puedes usar para comprobar el estado. Usa `crawl` cuando quieras un &quot;waiter&quot; que bloquee hasta que finalice. Consulta [Paginación](#pagination) para conocer el comportamiento de paginación y los límites.
+
+<StartCrawlPythonShort />
+
+<div id="checking-crawl-status">
+  ### Comprobar el estado del rastreo
+</div>
+
+Para consultar el estado de un trabajo de rastreo, usa el método `get_crawl_status`. Recibe el ID del trabajo como parámetro y devuelve el estado actual del rastreo.
+
+<CheckCrawlStatusPythonShort />
+
+<div id="cancelling-a-crawl">
+  ### Cancelar un rastreo
+</div>
+
+Para cancelar un trabajo de rastreo, usa el método `cancel_crawl`. Recibe como parámetro el ID del trabajo iniciado con `start_crawl` y devuelve el estado de la cancelación.
+
+<CancelCrawlPythonShort />
+
+<div id="map-a-website">
+  ### Mapear un sitio web
+</div>
+
+Usa `map` para generar una lista de URL de un sitio web. Las opciones te permiten personalizar el proceso de mapeo, incluido excluir subdominios o utilizar el sitemap.
+
+<MapPythonShort />
+
+{/* ### Extracción de datos estructurados de sitios web
+
+  Para extraer datos estructurados de sitios web, usa el método `extract`. Recibe las URL de las que extraer datos, un prompt y un esquema como argumentos. El esquema es un modelo de Pydantic que define la estructura de los datos extraídos.
+
+  <ExtractPythonShort /> */}
+
+<div id="crawling-a-website-with-websockets">
+  ### Rastreo de un sitio web con WebSockets
+</div>
+
+Para rastrear un sitio web con WebSockets, inicia el job con `start_crawl` y suscríbete usando el helper `watcher`. Crea un watcher con el ID del job y registra handlers (p. ej., para page, completed, failed) antes de llamar a `start()`.
+
+<CrawlWebSocketPythonBase />
+
+<div id="pagination">
+  ### Paginación
+</div>
+
+Los endpoints de Firecrawl para rastreo y procesamiento por lotes devuelven una URL `next` cuando hay más datos disponibles. El SDK de Python pagina automáticamente por defecto y agrega todos los documentos; en ese caso, `next` será `None`. Puedes desactivar la paginación automática o establecer límites.
+
+<div id="crawl">
+  #### Rastreo
+</div>
+
+Usa el método de espera `crawl` para la opción más sencilla, o inicia un trabajo y navega por las páginas manualmente.
+
+<div id="simple-crawl-auto-pagination-default">
+  ##### Rastreo simple (paginación automática, predeterminado)
+</div>
+
+* Consulta el flujo predeterminado en [Rastrear un sitio web](#crawl-a-website).
+
+<div id="manual-crawl-with-pagination-control-single-page">
+  ##### Rastreo manual con control de paginación (una sola página)
+</div>
+
+* Inicia un trabajo y luego obtiene una página a la vez con `auto_paginate=False`.
+
+```python Python
+crawl_job = client.start_crawl("https://example.com", limit=100)
+
+status = client.get_crawl_status(crawl_job.id, pagination_config=PaginationConfig(auto_paginate=False))
+print("rastrear una sola página:", status.status, "docs:", len(status.data), "siguiente:", status.next)
+```
+
+<div id="manual-crawl-with-limits-auto-pagination-early-stop">
+  ##### Rastreo manual con límites (paginación automática + detención anticipada)
+</div>
+
+* Mantén la paginación automática activada, pero detén antes con `max_pages`, `max_results` o `max_wait_time`.
+
+```python Python
+status = client.get_crawl_status(
+    crawl_job.id,
+    pagination_config=PaginationConfig(max_pages=2, max_results=50, max_wait_time=15),
+)
+print("rastreo limitado:", status.status, "docs:", len(status.data), "siguiente:", status.next)
+```
+
+<div id="batch-scrape">
+  #### Raspado por lotes
+</div>
+
+Usa el método waiter `batch_scrape`, o inicia un job y pagina manualmente.
+
+<div id="simple-batch-scrape-auto-pagination-default">
+  ##### Raspado por lotes sencillo (paginación automática, por defecto)
+</div>
+
+* Consulta el flujo por defecto en [Raspado por lotes](/es/features/batch-scrape).
+
+<div id="manual-batch-scrape-with-pagination-control-single-page">
+  ##### Raspado por lotes manual con control de paginación (una sola página)
+</div>
+
+* Inicia un trabajo y luego recupera una página a la vez con `auto_paginate=False`.
+
+```python Python
+batch_job = client.start_batch_scrape(urls)
+status = client.get_batch_scrape_status(batch_job.id, pagination_config=PaginationConfig(auto_paginate=False))
+print("raspado por lotes (una sola página):", status.status, "docs:", len(status.data), "siguiente:", status.next)
+```
+
+<div id="manual-batch-scrape-with-limits-auto-pagination-early-stop">
+  ##### Raspado por lotes manual con límites (paginación automática + detención anticipada)
+</div>
+
+* Mantén la paginación automática activada, pero detén el proceso de forma anticipada con `max_pages`, `max_results` o `max_wait_time`.
+
+```python Python
+status = client.get_batch_scrape_status(
+    batch_job.id,
+    pagination_config=PaginationConfig(max_pages=2, max_results=100, max_wait_time=20),
+)
+print("lote limitado:", status.status, "docs:", len(status.data), "siguiente:", status.next)
+```
+
+<div id="error-handling">
+  ## Manejo de errores
+</div>
+
+El SDK gestiona los errores que devuelve la API de Firecrawl y arroja las excepciones correspondientes. Si se produce un error durante una solicitud, se lanzará una excepción con un mensaje de error descriptivo.
+
+<div id="async-class">
+  ## Clase asíncrona
+</div>
+
+Para operaciones asíncronas, usa la clase `AsyncFirecrawl`. Sus métodos son equivalentes a los de `Firecrawl`, pero no bloquean el hilo principal.
+
+<AIOPython />

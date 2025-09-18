@@ -1,0 +1,137 @@
+---
+title: "Search (/v2/search)"
+openapi: "v2-openapi POST /search"
+---
+
+<div id="whats-new-in-v2">
+  ## Novedades de la v2
+</div>
+
+<div id="search-multiple-sources">
+  ### Buscar en múltiples fuentes
+</div>
+
+Busca en la web, imágenes y noticias a la vez:
+
+```json
+{
+  "query": "firecrawl web scraping",
+  "sources": [ "web", "images", "news" ]
+}
+```
+
+
+<div id="response-format-changed">
+  ### Cambio en el formato de la respuesta
+</div>
+
+v1: lista plana de resultados. v2: organizado por tipo de fuente:
+
+```json
+{
+  "success": true,
+  "data": {
+    "web": [/* resultados de la web */],
+    "images": [/* resultados de imágenes */],
+    "news": [/* resultados de noticias */]
+  }
+}
+```
+
+
+<div id="new-features">
+  ### Nuevas funciones
+</div>
+
+- Filtrar por rangos de tiempo ("past week", "past month")
+- Orientar a países o regiones específicos
+- Filtrado por categoría: buscar en repositorios de GitHub o sitios de investigación
+- Resultados limitados a 500 durante la fase alfa
+
+El endpoint de búsqueda combina la búsqueda web (SERP) con las capacidades de raspado de Firecrawl para devolver el contenido completo de la página para cualquier consulta.
+
+Incluye `scrapeOptions` con `formats: [{"type": "markdown"}]` para obtener el contenido completo en markdown de cada resultado de búsqueda; de lo contrario, por defecto recibirás los resultados del SERP (url, title, description). También puedes usar otros formatos como `{"type": "summary"}` para contenido condensado.
+
+<div id="supported-query-operators">
+  ## Operadores de consulta admitidos
+</div>
+
+Admitimos una variedad de operadores de consulta que te permiten filtrar mejor tus búsquedas.
+
+| Operador | Funcionalidad | Ejemplos |
+---|-|-|
+| `""` | Coincidencia exacta de una cadena de texto (no difusa) | `"Firecrawl"`
+| `-` | Excluye ciertas palabras clave o niega otros operadores | `-bad`, `-site:firecrawl.dev`
+| `site:` | Solo devuelve resultados de un sitio web específico | `site:firecrawl.dev`
+| `inurl:` | Solo devuelve resultados que incluyen una palabra en la URL | `inurl:firecrawl`
+| `allinurl:` | Solo devuelve resultados que incluyen varias palabras en la URL | `allinurl:git firecrawl`
+| `intitle:` | Solo devuelve resultados que incluyen una palabra en el título de la página | `intitle:Firecrawl`
+| `allintitle:` | Solo devuelve resultados que incluyen varias palabras en el título de la página | `allintitle:firecrawl playground`
+| `related:` | Solo devuelve resultados relacionados con un dominio específico | `related:firecrawl.dev`
+| `imagesize:` | Solo devuelve imágenes con dimensiones exactas | `imagesize:1920x1080`
+| `larger:` | Solo devuelve imágenes más grandes que las dimensiones especificadas | `larger:1920x1080`
+
+<div id="location-parameter">
+  ## Parámetro de ubicación
+</div>
+
+Usa el parámetro `location` para obtener resultados de búsqueda con orientación geográfica. Formato: `"string"`. Ejemplos: `"Germany"`, `"San Francisco,California,United States"`.
+
+Consulta la [lista completa de ubicaciones admitidas](https://firecrawl.dev/search_locations.json) para ver todos los países e idiomas disponibles.
+
+<div id="categories-parameter">
+  ## Parámetro de categorías
+</div>
+
+Filtra los resultados de búsqueda por categorías específicas usando el parámetro `categories`:
+
+- **`github`**: Busca en repositorios, código, issues y documentación de GitHub
+- **`research`**: Busca en sitios académicos y de investigación (arXiv, Nature, IEEE, PubMed, etc.)
+
+<div id="example-usage">
+  ### Ejemplo de uso
+</div>
+
+```json
+{
+  "query": "aprendizaje automático",
+  "categories": ["github", "investigación"],
+  "limit": 10
+}
+```
+
+
+<div id="category-response">
+  ### Respuesta de categoría
+</div>
+
+Cada resultado incluye un campo `category` que indica su fuente:
+
+```json
+{
+  "success": true,
+  "data": {
+    "web": [
+      {
+        "url": "https://github.com/example/ml-project",
+        "title": "Proyecto de aprendizaje automático",
+        "description": "Implementación de algoritmos de ML",
+        "category": "github"
+      },
+      {
+        "url": "https://arxiv.org/abs/2024.12345",
+        "title": "Artículo de investigación sobre ML",
+        "description": "Avances recientes en aprendizaje automático"
+        "category": "research"
+      }
+    ]
+  }
+}
+```
+
+
+<div id="time-based-search">
+  ## Búsqueda por tiempo
+</div>
+
+Usa el parámetro `tbs` para filtrar los resultados por periodos de tiempo, incluidos rangos de fechas personalizados. Consulta la [documentación de Search](https://docs.firecrawl.dev/features/search#time-based-search) para ver ejemplos detallados y los formatos admitidos.

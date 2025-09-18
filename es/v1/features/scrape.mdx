@@ -1,0 +1,306 @@
+---
+title: "Raspado"
+description: "Convierte cualquier URL en datos limpios"
+og:title: "Raspado | Firecrawl"
+og:description: "Convierte cualquier URL en datos limpios"
+---
+
+import InstallationPython from "/snippets/es/v1/installation/python.mdx";
+import InstallationNode from "/snippets/es/v1/installation/js.mdx";
+import InstallationGo from "/snippets/es/v1/installation/go.mdx";
+import InstallationRust from "/snippets/es/v1/installation/rust.mdx";
+import ScrapePython from "/snippets/es/v1/scrape/base/python.mdx";
+import ScrapeNode from "/snippets/es/v1/scrape/base/js.mdx";
+import ScrapeGo from "/snippets/es/v1/scrape/base/go.mdx";
+import ScrapeRust from "/snippets/es/v1/scrape/base/rust.mdx";
+import ScrapeCURL from "/snippets/es/v1/scrape/base/curl.mdx";
+import ScrapeResponse from "/snippets/es/v1/scrape/base/output.mdx";
+import ExtractCURL from "/snippets/es/v1/llm-extract/base/curl.mdx";
+import ExtractPython from "/snippets/es/v1/llm-extract/base/python.mdx";
+import ExtractNode from "/snippets/es/v1/llm-extract/base/js.mdx";
+import ExtractOutput from "/snippets/es/v1/llm-extract/base/output.mdx";
+import ExtractNoSchemaCURL from "/snippets/es/v1/llm-extract/no-schema/curl.mdx";
+import ExtractNoSchemaOutput from "/snippets/es/v1/llm-extract/no-schema/output.mdx";
+import ScrapeActionsPython from "/snippets/es/v1/scrape/actions/python.mdx";
+import ScrapeActionsNode from "/snippets/es/v1/scrape/actions/js.mdx";
+import ScrapeActionsCURL from "/snippets/es/v1/scrape/actions/curl.mdx";
+import ScrapeActionsOutput from "/snippets/es/v1/scrape/actions/output.mdx";
+import BatchScrapePython from "/snippets/es/v1/batch-scrape/base/python.mdx";
+import BatchScrapeNode from "/snippets/es/v1/batch-scrape/base/js.mdx";
+import BatchScrapeCURL from "/snippets/es/v1/batch-scrape/base/curl.mdx";
+import BatchScrapeOutput from "/snippets/es/v1/batch-scrape/base/output.mdx";
+import BatchScrapeAsyncOutput from "/snippets/es/v1/batch-scrape/base/async-output.mdx";
+import ScrapeLocationPython from "/snippets/es/v1/scrape/location/python.mdx";
+import ScrapeLocationNode from "/snippets/es/v1/scrape/location/js.mdx";
+import ScrapeLocationCURL from "/snippets/es/v1/scrape/location/curl.mdx";
+
+Firecrawl convierte páginas web en Markdown, ideal para aplicaciones con LLM.
+
+* Gestiona las complejidades: proxies, caché, límites de tasa, contenido bloqueado por JS
+* Maneja contenido dinámico: sitios dinámicos, páginas renderizadas con JS, PDFs e imágenes
+* Genera Markdown limpio, datos estructurados, capturas de pantalla o HTML.
+
+Para más detalles, consulta la [Referencia del endpoint Scrape de la API](https://docs.firecrawl.dev/api-reference/endpoint/scrape).
+
+<div id="scraping-a-url-with-firecrawl">
+  ## Raspado de una URL con Firecrawl
+</div>
+
+<div id="scrape-endpoint">
+  ### /scrape endpoint
+</div>
+
+Se usa para extraer el contenido de una URL.
+
+<div id="installation">
+  ### Instalación
+</div>
+
+<CodeGroup>
+  <InstallationPython />
+
+  <InstallationNode />
+
+  <InstallationGo />
+
+  <InstallationRust />
+</CodeGroup>
+
+<div id="usage">
+  ### Uso
+</div>
+
+<CodeGroup>
+  <ScrapePython />
+
+  <ScrapeNode />
+
+  <ScrapeGo />
+
+  <ScrapeRust />
+
+  <ScrapeCURL />
+</CodeGroup>
+
+Para obtener más información sobre los parámetros, consulta la [Referencia de la API](https://docs.firecrawl.dev/api-reference/endpoint/scrape).
+
+<div id="response">
+  ### Respuesta
+</div>
+
+Los SDK devolverán el objeto de datos directamente. cURL devolverá el payload exactamente como se muestra a continuación.
+
+<ScrapeResponse />
+
+<div id="scrape-formats">
+  ## Formatos de raspado
+</div>
+
+Ahora puedes elegir en qué formatos quieres el resultado. Puedes especificar múltiples formatos de salida. Los formatos compatibles son:
+
+* Markdown (markdown)
+* HTML (html)
+* HTML sin procesar (rawHtml) (sin modificaciones)
+* Captura de pantalla (screenshot o screenshot@fullPage)
+* Enlaces (links)
+* JSON (json): salida estructurada
+
+Las claves de salida coincidirán con el formato que elijas.
+
+<div id="extract-structured-data">
+  ## Extraer datos estructurados
+</div>
+
+<div id="scrape-with-json-endpoint">
+  ### endpoint /scrape (con json)
+</div>
+
+Se utiliza para extraer datos estructurados de páginas raspadas.
+
+<CodeGroup>
+  <ExtractPython />
+
+  <ExtractNode />
+
+  <ExtractCURL />
+</CodeGroup>
+
+Salida:
+
+<ExtractOutput />
+
+<div id="extracting-without-schema-new">
+  ### Extracción sin esquema (Nuevo)
+</div>
+
+Ahora puedes extraer sin un esquema con solo pasar un `prompt` al endpoint. El LLM elige la estructura de los datos.
+
+<CodeGroup>
+  <ExtractNoSchemaCURL />
+</CodeGroup>
+
+Resultado:
+
+<ExtractNoSchemaOutput />
+
+<div id="json-options-object">
+  ### Objeto de opciones JSON
+</div>
+
+El objeto `jsonOptions` acepta los siguientes parámetros:
+
+* `schema`: El esquema que se usará para la extracción.
+* `systemPrompt`: La indicación del sistema que se usará para la extracción.
+* `prompt`: La indicación que se usará para la extracción sin esquema.
+
+<div id="interacting-with-the-page-with-actions">
+  ## Interacting with the page with Actions
+</div>
+
+Firecrawl te permite realizar varias acciones en una página web antes de extraer su contenido. Esto es especialmente útil para interactuar con contenido dinámico, navegar entre páginas o acceder a contenido que requiere interacción del usuario.
+
+Aquí tienes un ejemplo de cómo usar acciones para ir a google.com, buscar Firecrawl, hacer clic en el primer resultado y tomar una captura de pantalla.
+
+Es importante usar casi siempre la acción `wait` antes o después de ejecutar otras acciones para darle a la página el tiempo suficiente para cargarse.
+
+<div id="example">
+  ### Ejemplo
+</div>
+
+<CodeGroup>
+  <ScrapeActionsPython />
+
+  <ScrapeActionsNode />
+
+  <ScrapeActionsCURL />
+</CodeGroup>
+
+<div id="output">
+  ### Salida
+</div>
+
+<CodeGroup>
+  <ScrapeActionsOutput />
+</CodeGroup>
+
+Para obtener más información sobre los parámetros de acciones, consulta la [Referencia de la API](https://docs.firecrawl.dev/api-reference/endpoint/scrape).
+
+<div id="location-and-language">
+  ## Ubicación e idioma
+</div>
+
+Especifica el país y los idiomas preferidos para obtener contenido relevante según tu ubicación de destino y tus preferencias de idioma.
+
+<div id="how-it-works">
+  ### Cómo funciona
+</div>
+
+Cuando especificas la ubicación, Firecrawl usará un proxy adecuado si está disponible y emulará la configuración de idioma y zona horaria correspondientes. De forma predeterminada, la ubicación se establece en “US” si no se indica lo contrario.
+
+<div id="usage">
+  ### Uso
+</div>
+
+Para usar la configuración de ubicación e idioma, incluye el objeto `location` en el cuerpo de la solicitud con las siguientes propiedades:
+
+* `country`: código de país ISO 3166-1 alfa-2 (p. ej., &#39;US&#39;, &#39;AU&#39;, &#39;DE&#39;, &#39;JP&#39;). De forma predeterminada es &#39;US&#39;.
+* `languages`: una lista de idiomas y configuraciones regionales preferidas para la solicitud, en orden de prioridad. De forma predeterminada, utiliza el idioma de la ubicación especificada.
+
+<CodeGroup>
+  <ScrapeLocationPython />
+
+  <ScrapeLocationNode />
+
+  <ScrapeLocationCURL />
+</CodeGroup>
+
+<div id="batch-scraping-multiple-urls">
+  ## Raspado por lotes de múltiples URL
+</div>
+
+Ahora puedes realizar raspados por lotes de múltiples URL al mismo tiempo. Recibe las URL iniciales y parámetros opcionales como argumentos. El argumento params te permite especificar opciones adicionales para el trabajo de raspado por lotes, como los formatos de salida.
+
+<div id="how-it-works">
+  ### Cómo funciona
+</div>
+
+Es muy similar a cómo funciona el endpoint `/crawl`. Envía un trabajo de Raspado por lotes y devuelve un ID de trabajo para consultar el estado del lote.
+
+El SDK ofrece 2 métodos: sincrónico y asincrónico. El método sincrónico devuelve los resultados del trabajo de Raspado por lotes, mientras que el asincrónico devuelve un ID de trabajo que puedes usar para consultar el estado del lote.
+
+<div id="usage">
+  ### Uso
+</div>
+
+<CodeGroup>
+  <BatchScrapePython />
+
+  <BatchScrapeNode />
+
+  <BatchScrapeCURL />
+</CodeGroup>
+
+<div id="response">
+  ### Respuesta
+</div>
+
+Si usas los métodos síncronos de los SDK, se devolverán los resultados del trabajo de Raspado por lotes. De lo contrario, se devolverá un ID de trabajo que puedes usar para consultar el estado del raspado por lotes.
+
+<div id="synchronous">
+  #### Sincrónico
+</div>
+
+<BatchScrapeOutput />
+
+<div id="asynchronous">
+  #### Asíncrono
+</div>
+
+Luego puedes usar el ID del trabajo para comprobar el estado del Raspado por lotes llamando al endpoint `/batch/scrape/{id}`. Este endpoint está pensado para usarse mientras el trabajo sigue en ejecución o justo después de que haya finalizado, **ya que los trabajos de Raspado por lotes expiran después de 24 horas**.
+
+<BatchScrapeAsyncOutput />
+
+<div id="stealth-mode">
+  ## Modo sigiloso
+</div>
+
+Para sitios web con protección anti-bot avanzada, Firecrawl ofrece un modo de proxy sigiloso que mejora las tasas de éxito al raspar sitios complejos.
+
+Más información sobre el [Modo sigiloso](/es/features/stealth-mode).
+
+<div id="using-fire-1-with-scrape">
+  ## Uso de FIRE-1 con Scrape
+</div>
+
+Puedes usar el agente FIRE-1 con el endpoint `/scrape` para aplicar navegación inteligente antes de extraer el contenido final.
+
+Activar FIRE-1 es sencillo. Simplemente incluye un objeto `agent` en tu solicitud de API de scrape o extract:
+
+```json
+"agent": {
+  "model": "FIRE-1",
+  "prompt": "Instrucciones detalladas de navegación aquí."
+}
+```
+
+*Nota:* El campo `prompt` es obligatorio en las solicitudes de raspado, y le indica a FIRE-1 con precisión cómo interactuar con la página web.
+
+<div id="example-usage-with-scrape-endpoint">
+  ### Ejemplo de uso con el endpoint de scrape
+</div>
+
+Aquí tienes un ejemplo rápido que utiliza FIRE-1 con el endpoint de scrape para obtener las empresas del segmento de consumo de Y Combinator:
+
+```bash
+curl -X POST https://api.firecrawl.dev/v1/scrape \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "url": "https://ycombinator.com/companies",
+    "formats": ["markdown"],
+    "agent": {
+      "model": "FIRE-1",
+      "prompt": "Obtén las empresas de W22 en el ámbito de consumo haciendo clic en los botones correspondientes"
+    }
+  }'
+```

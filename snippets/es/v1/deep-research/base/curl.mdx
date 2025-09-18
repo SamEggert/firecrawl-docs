@@ -1,0 +1,11 @@
+```bash cURL
+curl -X POST "https://api.firecrawl.dev/v1/deep-research" \
+  -H "Authorization: Bearer tu_clave_api" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "¿Cuáles son los avances más recientes en computación cuántica?",
+    "maxDepth": 5,
+    "timeLimit": 180,
+    "maxUrls": 15
+  }'
+```

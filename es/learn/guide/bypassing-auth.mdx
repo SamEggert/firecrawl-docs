@@ -1,0 +1,131 @@
+---
+title: "Raspado tras autenticación"
+description: "Aprende a omitir la autenticación en un sitio web reenviando cookies."
+og:title: "Raspado tras autenticación | Firecrawl"
+og:description: "Aprende a omitir la autenticación en un sitio web reenviando cookies."
+---
+
+> Nota: este ejemplo utiliza la [versión v0 de la API de Firecrawl](/es/v0/introduction). Puedes instalar la versión 0.0.20 del SDK de Python o la 0.0.36 del SDK de Node.
+
+Con Firecrawl, puedes enviar cookies en los encabezados para omitir la autenticación en un sitio web. Esto puede ser útil cuando necesitas extraer contenido de un sitio que requiere que hayas iniciado sesión.
+
+<div id="example">
+  ### Ejemplo
+</div>
+
+Para evitar la autenticación, debes incluir el parámetro `headers` en tu solicitud y establecer el encabezado `Cookies` con los valores adecuados que puedes obtener de las cookies de tu navegador. Si necesitas ayuda para obtener las cookies, consulta este artículo: [Cómo obtener cookies](https://cookie-script.com/documentation/how-to-check-cookies-on-chrome-and-firefox)
+
+<CodeGroup>
+  ```bash Python
+  pip install firecrawl-py
+  ```
+
+  ```bash JavaScript
+  npm install @mendable/firecrawl-js
+  ```
+
+  ```bash Go
+  go get github.com/mendableai/firecrawl-go
+  ```
+</CodeGroup>
+
+<div id="usage">
+  ### Uso
+</div>
+
+<CodeGroup>
+  ```python Python
+  from firecrawl import FirecrawlApp
+
+  app = FirecrawlApp(api_key="YOUR_API_KEY")
+
+  app.scrape_url("https://docs.firecrawl.dev", {
+    pageOptions:{
+      headers:{
+        "Cookie": "cookie1=value1; cookie2=value2"
+      }
+    }
+  })
+  ```
+
+  ```javascript JavaScript
+  import { FirecrawlApp } from 'firecrawl-js';
+
+  const app = new FirecrawlApp({ apiKey: 'YOUR_API_KEY' });
+
+  app.scrapeUrl('https://docs.firecrawl.dev', {
+    pageOptions:{
+      headers:{
+        "Cookie": "cookie1=value1; cookie2=value2"
+      }
+    }
+  });
+  ```
+
+  ```go Go
+  import (
+    "fmt"
+    "log"
+
+    "github.com/mendableai/firecrawl-go"
+  )
+
+  func main() {
+    // Inicializa FirecrawlApp con tu clave de API
+    app, err := firecrawl.NewFirecrawlApp("YOUR_API_KEY")
+    if err != nil {
+      log.Fatalf("No se pudo inicializar FirecrawlApp: %v", err)
+    }
+
+    params := map[string]any{
+      "pageOptions": map[string]any{
+        "headers": map[string]any{
+          "Cookie": "cookie1=value1; cookie2=value2"
+        }
+      },
+    }
+    scrapedData, err := app.ScrapeURL("docs.firecrawl.dev", params)
+    if err != nil {
+      log.Fatalf("Se produjo un error durante el raspado: %v", err)
+    }
+    fmt.Println(scrapedData)
+  }
+  ```
+
+  ```rust Rust
+  use firecrawl::FirecrawlApp;
+
+  #[tokio::main]
+  async fn main() {
+      let api_key = "YOUR_API_KEY";
+      let api_url = "https://api.firecrawl.dev";
+      let app = FirecrawlApp::new(api_key, api_url).expect("Error al inicializar FirecrawlApp");
+
+      let scrape_params = json!({
+          "pageOptions": {
+              "headers": {
+                  "Cookie": "cookie1=value1; cookie2=value2"
+              }
+          }
+      });
+
+      let scrape_result = app.scrape_url("https://docs.firecrawl.dev", Some(scrape_params)).await;
+      match scrape_result {
+          Ok(data) => println!("Resultado del raspado:\n{}", data),
+          Err(e) => eprintln!("Falló el raspado: {}", e),
+      }
+  }
+  ```
+
+  ```curl cURL
+  curl -X POST https://api.firecrawl.dev/v0/scrape \
+      -H 'Content-Type: application/json' \
+      -H 'Authorization: Bearer YOUR_API_KEY' \
+      -d '{
+        "url": "https://example.com",
+        "headers": {
+          "Cookie": "cookie1=value1; cookie2=value2"
+        }
+      }'
+  ```
+</CodeGroup>

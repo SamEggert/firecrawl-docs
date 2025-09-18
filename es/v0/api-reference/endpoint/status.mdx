@@ -1,0 +1,8 @@
+---
+title: 'Obtener el estado del rastreo'
+openapi: 'v0-openapi GET /crawl/status/{jobId}'
+---
+
+Este endpoint obtiene el estado de un trabajo de rastreo. Si el trabajo aún no ha finalizado, la respuesta incluye contenido en `partial_data`. Una vez finalizado, el contenido está disponible en `data`.
+
+Recomendamos llevar tu propio seguimiento de los trabajos de rastreo, ya que los resultados del estado pueden expirar después de 24 horas.

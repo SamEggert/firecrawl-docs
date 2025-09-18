@@ -1,0 +1,11 @@
+```go Go
+// Raspado de un sitio web
+scrapeResult, err := app.ScrapeUrl("https://firecrawl.dev", map[string]any{
+  "formats": []string{"markdown", "html"},
+})
+if err != nil {
+  log.Fatalf("No se pudo raspar la URL: %v", err)
+}
+
+fmt.Println(scrapeResult)
+```

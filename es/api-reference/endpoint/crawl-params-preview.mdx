@@ -1,0 +1,34 @@
+---
+title: "Vista previa de parámetros de crawl"
+openapi: 'v2-openapi POST /crawl/params-preview'
+---
+
+<div id="whats-new-in-v2">
+  ## Novedades de la v2
+</div>
+
+<div id="crawl-params-preview">
+  ### Vista previa de parámetros de Crawl
+</div>
+
+```json
+{
+  "url": "https://example.com",
+  "prompt": "Rastrea todo el sitio web, pero excluye /admin y /api"
+}   
+```
+
+
+<div id="response">
+  ### Respuesta
+</div>
+
+```json
+{
+  "url": "https://example.com",
+  "prompt": "Rastrea todo el sitio",
+  "crawlEntireDomain": true,
+  "excludePaths": ["/admin/.*", "/api/.*"],
+  "sitemap": "incluir"
+}
+```

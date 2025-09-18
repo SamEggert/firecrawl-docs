@@ -1,0 +1,110 @@
+---
+title: "Búsqueda bajo demanda"
+openapi: "v1-openapi POST /x402/search"
+---
+
+<Info>
+  **Endpoint de búsqueda de pago por uso**
+
+  Este endpoint te permite utilizar las potentes capacidades de búsqueda de Firecrawl sin suscripción, pagando por búsqueda con criptomonedas. Ideal para búsquedas puntuales o para realizar pruebas antes de comprometerte con una suscripción.
+</Info>
+
+<Warning>
+  **Función experimental**
+
+  Este es un endpoint experimental. Las funciones, los precios y la disponibilidad pueden cambiar sin previo aviso. Recomendamos usar el endpoint de búsqueda estándar basado en suscripción para entornos de producción.
+</Warning>
+
+<div id="authentication">
+  ## Autenticación
+</div>
+
+Este endpoint requiere un encabezado especial de pago en lugar de la clave de API estándar:
+
+```
+X-Payment: {{paymentHeader}}
+```
+
+<div id="how-it-works">
+  ## Cómo funciona
+</div>
+
+El endpoint de Búsqueda bajo demanda combina la búsqueda web (SERP) con las capacidades de raspado de Firecrawl para devolver el contenido completo de la página para cualquier consulta, igual que el endpoint `/search` normal, pero con precios de pago por uso.
+
+Incluye `scrapeOptions` con `formats: ["markdown"]` para obtener el contenido completo en Markdown para cada resultado de búsqueda; de lo contrario, de forma predeterminada recibirás los resultados del SERP (URL, título, descripción).
+
+<div id="request-parameters">
+  ### Parámetros de la solicitud
+</div>
+
+Se admiten todos los parámetros del endpoint estándar `/search`, con la siguiente excepción:
+
+<Note>
+  **Limitación importante**: El parámetro `limit` tiene un tope de **10 resultados como máximo** para el endpoint de wallet (frente a 100 en el endpoint estándar).
+</Note>
+
+Para ver la lista completa de parámetros disponibles, los operadores de consulta admitidos y sus descripciones, consulta la [documentación del endpoint de Búsqueda estándar](/es/api-reference/endpoint/search).
+
+<div id="example-request">
+  ## Ejemplo de solicitud
+</div>
+
+```bash
+curl -X POST https://api.firecrawl.dev/v1/x402/search \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <token>' \
+  -H 'X-Payment: {{paymentHeader}}' \
+  -d '{
+    "query": "Calendario de la Premier League para la temporada 2025/26",
+    "limit": 10,  # Máximo 10 resultados permitidos
+    "scrapeOptions": {
+      "formats": ["markdown"],
+      "onlyMainContent": true
+    }
+  }'
+```
+
+<div id="response">
+  ## Respuesta
+</div>
+
+El formato de la respuesta es idéntico al endpoint estándar `/search`:
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "title": "Título de la página",
+      "description": "Descripción de la página del resultado de búsqueda",
+      "url": "https://example.com",
+      "markdown": "# Contenido de la página\n\nContenido en Markdown si se solicitó el raspado...",
+      "metadata": {
+        "title": "Título de la página",
+        "description": "Descripción meta"
+        "sourceURL": "https://example.com",
+        "statusCode": 200
+      }
+    }
+  ]
+}
+```
+
+<div id="pricing">
+  ## Precios
+</div>
+
+**Precio actual: US$0.01 por solicitud**
+
+<Warning>
+  **Aviso de precios**: El precio actual de US$0.01 por solicitud puede cambiar en cualquier momento sin previo aviso. Consulta el precio más reciente al generar tu encabezado de pago.
+</Warning>
+
+Cada solicitud de búsqueda se cobra con un modelo de pago por uso, utilizando criptomonedas a través del sistema de encabezado de pago.
+
+<div id="see-also">
+  ## Ver también
+</div>
+
+* [Documentación de la función de búsqueda](/es/features/search) - Guía detallada de la funcionalidad de búsqueda
+* [Endpoint de búsqueda estándar](/es/api-reference/endpoint/search) - Endpoint de búsqueda por suscripción
